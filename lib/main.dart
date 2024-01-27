@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
-
+String dropbuttonvalue = 'Hôm nay';
 
 class HomePageState extends State<HomePage> {
   @override
@@ -117,6 +117,7 @@ class HomePageState extends State<HomePage> {
                     left: 20,
                       child:
                        DropdownButton(
+                         hint: Text('Hôm nay'),
                           items: [
                             DropdownMenuItem(
                               child: Text('Hôm nay'),
@@ -131,8 +132,11 @@ class HomePageState extends State<HomePage> {
                               value: 'Tháng này',
                             ),
                           ],
-                          value: 'Hôm nay',
-                          onChanged: (value) {
+                          value: dropbuttonvalue,
+                          onChanged: (String? value) {
+                           setState(() {
+                             dropbuttonvalue = value!;
+                           });
                             // Xử lý sự kiện khi người dùng chọn một giá trị mới
                           },
                         ),
