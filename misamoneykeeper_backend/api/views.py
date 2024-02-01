@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
 
@@ -13,16 +13,26 @@ class UserRegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.validated_data['password'] = make_password(serializer.validated_data['password'])
-            user = serializer.save()
-            
-            return JsonResponse({
-                'message': 'Register successful!'
-            }, status=status.HTTP_201_CREATED)
+            email = serializer.validated_data['email']  # Lấy địa chỉ email
+
+            # Kiểm tra tài khoản đã tồn tại hay chưa
+            if get_user_model().objects.filter(email=email).exists():
+                return JsonResponse({
+                    'error_message': 'Email này đã được đăng ký.',
+                    'error_code': 400,
+                }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                # Nếu email chưa được sử dụng, tiến hành đăng ký
+                serializer.validated_data['password'] = make_password(serializer.validated_data['password'])
+                user = serializer.save()
+
+                return JsonResponse({
+                    'message': 'Đăng ký thành công!'
+                }, status=status.HTTP_201_CREATED)
 
         else:
             return JsonResponse({
-                'error_message': 'This email has already exist!',
+                'error_message': 'Dữ liệu không hợp lệ.',
                 'errors_code': 400,
             }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -37,14 +47,16 @@ class UserLoginView(APIView):
             )
             if user:
                 refresh = TokenObtainPairSerializer().get_token(user)
+                # Lưu access token vào bảng dữ liệu
+                user.auth_token = refresh.access_token  # Giả sử trường auth_token trong model User
+                user.save()
                 data = {
-                    'refresh_token': str(refresh),
-                    'access_token': str(refresh.access_token)
+                    'payload': UserSerializer(user).data
                 }
                 return Response(data, status=status.HTTP_200_OK)
 
             return Response({
-                'error_message': 'Email or password is incorrect!',
+                'error_message': 'Email hoặc mật khẩu không đúng!',
                 'error_code': 400
             }, status=status.HTTP_400_BAD_REQUEST)
 

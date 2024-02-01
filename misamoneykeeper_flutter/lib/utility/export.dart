@@ -1,0 +1,9 @@
+export './images.dart';
+export './icons.dart';
+export './styles.dart';
+export './strings.dart';
+export './list.dart';
+export './vnd.dart';
+export 'package:flutter/material.dart';
+export 'package:velocity_x/velocity_x.dart';
+export 'package:get/get.dart';

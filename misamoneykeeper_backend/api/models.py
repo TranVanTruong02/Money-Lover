@@ -13,7 +13,7 @@ class User(AbstractUser):
     mobile = models.CharField(max_length=15, default='')
     mobile_code = models.CharField(max_length=6, default='')
     password = models.CharField(max_length=100, default='')
-    auth_token = models.CharField(max_length=100, default='')
+    auth_token = models.CharField(max_length=255, default='')
     reset_code = models.CharField(max_length=6, default='0000')
     number_coins = models.IntegerField(default=0)
     modify_date = models.DateTimeField(auto_now=True)

@@ -1,24 +1,28 @@
 from django.contrib import admin
 from .models import User
 
-# @admin.register(User)
-# class UserAdmin(admin.ModelAdmin):
-#     list_display = ('first_name', 'last_name', 'email', 'obile', 'u_status', 'u_created_date')
-#     list_filter = ('u_status', 'u_type', 'u_created_date')
-#     search_fields = ('u_first_name', 'u_last_name', 'email')
-#     ordering = ('user_id',)
-#     readonly_fields = ['u_created_date', 'u_modify_date']
-#     fieldsets = (
-#         ('User Name', {
-#             'fields': ('u_first_name', 'u_last_name')
-#         }),
-#         ('User Auth', {
-#             'fields': ('email', 'password')
-#         }),
-#         ('Additional Information', {
-#             'fields': ('u_type', 'u_mobile')
-#         })
-#     )
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    # Tùy chỉnh hiển thị và quản lý User trong admin
+    list_display = ('email', 'type', 'mobile', 'number_coins', 'modify_date')
+    search_fields = ('email', 'mobile')
+    list_filter = ('type',)
+    # list_display = ('first_name', 'last_name', 'email', 'mobile', 'u_status', 'u_created_date')
+    # list_filter = ('u_status', 'u_type', 'u_created_date')
+    # search_fields = ('u_first_name', 'u_last_name', 'email')
+    # ordering = ('user_id',)
+    # readonly_fields = ['u_created_date', 'u_modify_date']
+    # fieldsets = (
+    #     ('User Name', {
+    #         'fields': ('u_first_name', 'u_last_name')
+    #     }),
+    #     ('User Auth', {
+    #         'fields': ('email', 'password')
+    #     }),
+    #     ('Additional Information', {
+    #         'fields': ('u_type', 'u_mobile')
+    #     })
+    # )
 
 # @admin.register(UserDetails)
 # class UserDetailsAdmin(admin.ModelAdmin):
