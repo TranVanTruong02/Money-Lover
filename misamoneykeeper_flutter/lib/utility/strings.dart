@@ -1,3 +1,5 @@
+// App
+const appname = "MiSa";
 // Báo cáo
 const taichinhhientai = "Tài chính hiện tại";
 const tinhhinhthuchi = "Tình hình thu chi";

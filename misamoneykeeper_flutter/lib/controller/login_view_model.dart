@@ -1,7 +1,7 @@
+import 'package:misamoneykeeper_flutter/controller/splash_view_model.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
 import 'package:misamoneykeeper_flutter/server/service_call.dart';
 import 'package:misamoneykeeper_flutter/server/globs.dart';
-import 'package:misamoneykeeper_flutter/view/home/home_view.dart';
 
 class LoginViewModel extends GetxController {
   final txtEmail = TextEditingController().obs;
@@ -23,17 +23,19 @@ class LoginViewModel extends GetxController {
     ServiceCall.post({
       "email": txtEmail.value.text,
       "password": txtPassword.value.text,
-    }, SVKey.svLogin, withSuccess: (resObj) async {
-      var payload = resObj[KKey.payload] as Map? ?? {};
+    }, SVKey.svLogin, login: true, withSuccess: (resObj) async {
+      isLoading(false);
+      if (resObj[KKey.status] == 1) {
+        var payload = resObj[KKey.payload] as Map? ?? {};
 
-      Globs.udSet(payload, Globs.userPayload);
-      Globs.udBoolSet(true, Globs.userLogin);
+        Globs.udSet(payload, Globs.userPayload);
+        Globs.udBoolSet(true, Globs.userLogin);
 
-      Get.to(() => const HomeView());
-      // Get.delete<LoginViewModel>();
-      // Get.find<SplashViewModel>().goAfterLoginMainTab();
+        Get.delete<LoginViewModel>();
+        Get.find<SplashViewModel>().goAfterLoginMainTab();
 
-      // Get.snackbar("MiSa", resObj["message"].toString());
+        Get.snackbar("MiSa", "Bạn đã đăng nhập thành công");
+      }
     }, failure: (err) async {
       Get.snackbar("MiSA", err.toString());
     });

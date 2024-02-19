@@ -1,4 +1,4 @@
-import 'package:misamoneykeeper_flutter/view/auth/login_view.dart';
+import 'package:misamoneykeeper_flutter/controller/splash_view_model.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
 
 class SplashView extends StatefulWidget {
@@ -9,7 +9,7 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-
+  final splashVM = Get.put(SplashViewModel());
   @override
   void initState() {
     startApp();
@@ -18,7 +18,7 @@ class _SplashViewState extends State<SplashView> {
 
   void startApp() {
     Future.delayed(const Duration(seconds: 3), () {
-      Get.to(() => const LoginView());
+      splashVM.loadView();
     });
   }
 

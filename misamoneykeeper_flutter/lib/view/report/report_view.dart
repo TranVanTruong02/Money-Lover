@@ -1,4 +1,5 @@
 import 'package:misamoneykeeper_flutter/common/report_cell.dart';
+import 'package:misamoneykeeper_flutter/controller/splash_view_model.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
 import 'package:misamoneykeeper_flutter/view/report/report_details.dart';
 
@@ -10,6 +11,7 @@ class ReportView extends StatefulWidget {
 }
 
 class _ReportViewState extends State<ReportView> {
+  final splashVM = Get.find<SplashViewModel>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +39,8 @@ class _ReportViewState extends State<ReportView> {
                   switch (index) {
                     case 0:
                       Get.to(() => const ReportDetails());
+                    case 7:
+                      splashVM.logout();
                   }
                 });
           })),

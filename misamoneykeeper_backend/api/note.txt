@@ -1,9 +1,27 @@
-1. cd misamoneykeeper_backend
-2. env\Scripts\activate
-3. python manage.py runserver
 
-4. python manage.py makemigrations
-5. python manage.py migrate
+--- Chuyển Thư Mục ---
+
+cd misamoneykeeper_backend
+
+
+--- Vào Máy Ảo ---
+
+env\Scripts\activate
+
+
+--- Chạy Server ---
+
+python manage.py runserver
+
+
+--- Cập Nhật Bảng Dữ Liệu ---
+
+python manage.py makemigrations
+
+
+--- Cập Nhật Bảng Dữ Liệu ---
+
+python manage.py migrate
 
 (env) C:\Django\moneylover_backend>python manage.py createsuperuser
 Username (leave blank to use 'admin'): truongne

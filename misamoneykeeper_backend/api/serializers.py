@@ -1,15 +1,26 @@
 from rest_framework import serializers  
 from django.contrib.auth import get_user_model
+from .models import Account
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()  # Sử dụng get_user_model() để lấy model User chính xác
-        fields = ('first_name', 'last_name', 'type', 'email', 'mobile', 'password', 'auth_token', 'number_coins', 'modify_date')
+        fields = '__all__'
         extra_kwargs = {'password': {'write_only': True}}
+
+class UserViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()  # Sử dụng get_user_model() để lấy model User chính xác
+        fields = ('id', 'first_name', 'last_name', 'type', 'email', 'mobile', 'mobile_code', 'access_token', 'refresh_token', 'access_token_expiration', 'refresh_token_expiration', 'reset_code', 'number_coins')
 
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
+
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = '__all__'
 
 
 # class UserSerializer(serializers.ModelSerializer):

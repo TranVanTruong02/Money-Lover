@@ -1,32 +1,24 @@
 from django.contrib import admin
-from .models import User
+from .models import User, Account
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     # Tùy chỉnh hiển thị và quản lý User trong admin
-    list_display = ('email', 'type', 'mobile', 'number_coins', 'modify_date')
+    list_display = ('id', 'type', 'email', 'mobile', 'number_coins', 'modify_date')
     search_fields = ('email', 'mobile')
     list_filter = ('type',)
-    # list_display = ('first_name', 'last_name', 'email', 'mobile', 'u_status', 'u_created_date')
-    # list_filter = ('u_status', 'u_type', 'u_created_date')
-    # search_fields = ('u_first_name', 'u_last_name', 'email')
-    # ordering = ('user_id',)
-    # readonly_fields = ['u_created_date', 'u_modify_date']
-    # fieldsets = (
-    #     ('User Name', {
-    #         'fields': ('u_first_name', 'u_last_name')
-    #     }),
-    #     ('User Auth', {
-    #         'fields': ('email', 'password')
-    #     }),
-    #     ('Additional Information', {
-    #         'fields': ('u_type', 'u_mobile')
-    #     })
-    # )
+    ordering = ('id',)
+    readonly_fields = ['id', 'type', 'email', 'modify_date']
 
-# @admin.register(UserDetails)
-# class UserDetailsAdmin(admin.ModelAdmin):
-#     pass # Không có hành động nào
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
+    list_display = ('account_id', 'user_id', 'ac_name', 'ac_money', 'ac_type', 'ac_explanation', 'ac_modify_date')
+    search_fields = ('account_id', 'ac_name')
+    list_filter = ('ac_type',)
+    ordering = ('account_id',)
+    readonly_fields = ['account_id', 'user_id', 'ac_type', 'ac_modify_date']
+    
+
 
 
 # # list_display: Xác định các trường được hiển thị trong danh sách đối tượng.

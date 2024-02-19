@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:misamoneykeeper_flutter/view/report/report_view.dart';
 import 'package:misamoneykeeper_flutter/view/start/splash_view.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
 import 'package:misamoneykeeper_flutter/server/my_http_overrides.dart';
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: false,
       ),
-      home: const ReportView(),
+      home: const SplashView(),
     );
   }
 }

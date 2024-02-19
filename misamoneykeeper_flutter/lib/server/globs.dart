@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
@@ -83,7 +82,9 @@ class SVKey {
 
   static const svLogin = '${baseUrl}login';
   static const svSignUp = '${baseUrl}signup';
-  static const svHome = '${baseUrl}home';
+  static const svLogout = '${baseUrl}logout';
+  static const svRefresh = '${baseUrl}refreshaccesstoken';
+  static const svReportAccount = '${baseUrl}account';
 }
 
 class KKey {
