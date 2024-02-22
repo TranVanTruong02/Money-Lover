@@ -19,7 +19,7 @@ class _ReportViewState extends State<ReportView> {
         backgroundColor: Colors.blueAccent,
         elevation: 0.5,
         centerTitle: true,
-        title: "Báo Cáo".text.white.size(18).fontFamily(gilroyBold).make(),
+        title: "Báo Cáo".text.white.size(20).fontFamily(sansSemibold).make(),
       ),
       backgroundColor: const Color.fromARGB(255, 244, 242, 242),
       body: GridView.builder(

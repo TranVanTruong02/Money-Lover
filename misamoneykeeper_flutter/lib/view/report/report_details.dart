@@ -51,7 +51,7 @@ class _ReportDetailsState extends State<ReportDetails> {
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.black.withOpacity(0.5),
-                            fontFamily: gilroyMedium),
+                            fontFamily: sansRegular),
                       ),
                       index == position
                           ? Row(
@@ -105,7 +105,7 @@ class _ReportDetailsState extends State<ReportDetails> {
                 textLisReport[0]
                     .text
                     .size(18)
-                    .fontFamily(gilroyBold)
+                    .fontFamily(sansBold)
                     .white
                     .make(),
                 const SizedBox(width: 5),

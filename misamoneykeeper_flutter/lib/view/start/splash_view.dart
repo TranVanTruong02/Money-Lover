@@ -44,7 +44,7 @@ class _SplashViewState extends State<SplashView> {
               "Sổ Thu Chi MiSa"
                   .text
                   .size(16)
-                  .fontFamily(gilroyBold)
+                  .fontFamily(sansBold)
                   .color(Colors.black.withOpacity(0.8))
                   .make()
             ]),

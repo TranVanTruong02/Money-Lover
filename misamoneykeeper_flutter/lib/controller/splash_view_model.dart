@@ -3,7 +3,6 @@ import 'package:misamoneykeeper_flutter/server/globs.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
 import 'package:misamoneykeeper_flutter/view/auth/login_view.dart';
 import 'package:misamoneykeeper_flutter/view/report/report_view.dart';
-import 'package:http/http.dart' as http;
 
 class SplashViewModel extends GetxController {
   final userModel = UserModel().obs;

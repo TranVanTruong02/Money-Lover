@@ -14,13 +14,13 @@ class ReportRow extends StatelessWidget {
             .text
             .size(16)
             .color(Colors.black)
-            .fontFamily(gilroyRegular)
+            .fontFamily(sansRegular)
             .make(),
         formatCurrency(money)
             .text
             .size(16)
             .color(Colors.black)
-            .fontFamily(gilroyBold)
+            .fontFamily(sansBold)
             .make(),
       ],
     )

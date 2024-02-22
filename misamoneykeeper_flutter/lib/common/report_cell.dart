@@ -24,7 +24,7 @@ class ReportCell extends StatelessWidget {
           20.heightBox,
           title.text
               .size(16)
-              .fontFamily(gilroyBold)
+              .fontFamily(sansBold)
               .color(Colors.black87)
               .make()
         ]).box.white.roundedSM.shadowSm.make().onTap(onPressed);

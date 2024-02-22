@@ -14,58 +14,49 @@ typedef ResSuccess = Future<void> Function(Map<String, dynamic>);
 typedef ResFailure = Future<void> Function(dynamic);
 
 class ServiceCall {
-  static void post(Map<String, dynamic> parameter, String path,
+  static Future<void> post(Map<String, dynamic> parameter, String path,
       {bool isToken = false,
       bool login = false,
       ResSuccess? withSuccess,
-      ResFailure? failure}) {
-    Future(() {
-      try {
-        print("haha");
-        // Nếu nhưa chưa vượt thời hạn mã token
-        if (login == false) {
-          print("hihi");
-          print(DateTime.now().toUtc());
-          print(DateTime.parse(splashVM.userModel.value.accessTokenExpiration!)
-              .toUtc());
-          // Nếu như thời gian hiện tại vượt qua hạn token
-          if (DateTime.now().toUtc().isAfter(
-              DateTime.parse(splashVM.userModel.value.accessTokenExpiration!)
-                  .toUtc())) {
-            // Nếu token đã hết hạn
-            http.post(
-              Uri.parse(SVKey.mainUrl + SVKey.baseUrl + SVKey.svRefresh),
-              body: {
-                "refresh_token": splashVM.userModel.value.refreshToken,
-              },
-            ).then((value) {
-              if (kDebugMode) {
-                // Nếu lỗi
-                print(value.body);
-              }
-              var resObj =
-                  json.decode(value.body) as Map<String, dynamic>? ?? {};
-              if (resObj[KKey.status] == 1) {
-                splashVM.userModel.value = UserModel();
-                var payload = resObj[KKey.payload] as Map? ?? {};
+      ResFailure? failure}) async {
+    try {
+      // Nếu nhưa chưa vượt thời hạn mã token
+      if (login == false) {
+        // Nếu như thời gian hiện tại vượt qua hạn token
+        if (DateTime.now().toUtc().isAfter(
+            DateTime.parse(splashVM.userModel.value.accessTokenExpiration!)
+                .toUtc())) {
+          // Nếu token đã hết hạn
+          await http.post(
+            Uri.parse(SVKey.mainUrl + SVKey.baseUrl + SVKey.svRefresh),
+            body: {
+              "refresh_token": splashVM.userModel.value.refreshToken,
+            },
+          ).then((value) {
+            if (kDebugMode) {
+              // Nếu lỗi
+              print(value.body);
+            }
+            var resObj = json.decode(value.body) as Map<String, dynamic>? ?? {};
+            if (resObj[KKey.status] == 1) {
+              splashVM.userModel.value = UserModel();
+              var payload = resObj[KKey.payload] as Map? ?? {};
 
-                Globs.udSet(payload, Globs.userPayload);
+              Globs.udSet(payload, Globs.userPayload);
 
-                // Thực hiện tiếp
-                service(parameter, path, isToken, withSuccess, failure);
-              }
-            });
-          } else {
-            service(parameter, path, isToken, withSuccess, failure);
-          }
+              // Thực hiện tiếp
+              service(parameter, path, isToken, withSuccess, failure);
+            }
+          });
         } else {
-          print("oko");
           service(parameter, path, isToken, withSuccess, failure);
         }
-      } catch (err) {
-        if (failure != null) failure(err.toString());
+      } else {
+        service(parameter, path, isToken, withSuccess, failure);
       }
-    });
+    } catch (err) {
+      if (failure != null) failure(err.toString());
+    }
   }
 }
 

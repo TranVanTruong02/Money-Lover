@@ -155,7 +155,7 @@ class _LoginViewState extends State<LoginView> {
                               child: "Đăng kí"
                                   .text
                                   .size(16)
-                                  .fontFamily(gilroyBold)
+                                  .fontFamily(sansBold)
                                   .color(Colors.blue)
                                   .make())
                         ],

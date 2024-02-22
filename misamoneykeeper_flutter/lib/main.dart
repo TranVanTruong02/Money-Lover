@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'MiSa MoneyKeeper',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: gilroyBold,
+        fontFamily: sansBold,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: false,
       ),
