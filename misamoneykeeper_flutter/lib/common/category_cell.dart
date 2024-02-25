@@ -1,10 +1,10 @@
 import 'package:misamoneykeeper_flutter/utility/export.dart';
 
-class ReportCell extends StatelessWidget {
+class CategoryCell extends StatelessWidget {
   final String icon;
   final String title;
   final VoidCallback onPressed;
-  const ReportCell(
+  const CategoryCell(
       {super.key,
       required this.icon,
       required this.title,
@@ -18,14 +18,14 @@ class ReportCell extends StatelessWidget {
         children: [
           Image.asset(
             icon,
-            width: 35,
-            fit: BoxFit.cover,
+            width: 20,
           ),
+          10.heightBox,
           title.text
-              .size(16)
+              .size(12)
               .fontFamily(sansBold)
               .color(Colors.black87)
               .make()
-        ]).box.roundedSM.make().onTap(onPressed);
+        ]).box.white.roundedSM.shadowSm.make().onTap(onPressed);
   }
 }

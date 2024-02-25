@@ -22,3 +22,34 @@ const iconListReport = [
   icReport_7,
   icReport_8,
 ];
+
+
+const iconListCategory1 =[
+  icCafe,
+  icAntiem,
+  icDicho,
+  icBuasang,
+  icBuatrua,
+  icBuatoi
+];
+
+
+const textListCategory1 =[
+  cafe,
+  antiem,
+  dicho,
+  ansang,
+  antrua,
+  antoi
+];
+
+const textListAdd = [
+   chitien,
+   thutien
+];
+
+
+const textListinformation = [
+  doimatkhau,
+  dangxuat
+];

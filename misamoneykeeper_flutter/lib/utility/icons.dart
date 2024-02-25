@@ -13,3 +13,12 @@ const icReport_8 = "assets/icons/icReport_8.png";
 // Report Details
 const icArrowDown = "assets/icons/icArrowDown.png";
 const icRight = "assets/icons/icRight.png";
+
+
+
+const icCafe = "assets/icons/cafe.png";
+const icAntiem = "assets/icons/antiem.png";
+const icDicho = "assets/icons/dicho.png";
+const icBuasang = "assets/icons/buasang.png";
+const icBuatrua = "assets/icons/buatrua.png";
+const icBuatoi = "assets/icons/buatoi.png";

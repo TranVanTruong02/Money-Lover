@@ -132,7 +132,8 @@ class _ReportDetailsState extends State<ReportDetails> {
         body: IndexedStack(
           index: position,
           children: [
-            const CurrentFinancial(),
+           // const CurrentFinancial(),
+            Container(color: Colors.cyanAccent),
             Container(color: Colors.blue),
             Container(color: Colors.cyan),
             Container(color: Colors.lightGreenAccent),

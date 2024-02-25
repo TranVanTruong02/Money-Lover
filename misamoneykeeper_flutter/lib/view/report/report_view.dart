@@ -11,7 +11,7 @@ class ReportView extends StatefulWidget {
 }
 
 class _ReportViewState extends State<ReportView> {
-  final splashVM = Get.find<SplashViewModel>();
+  // final splashVM = Get.find<SplashViewModel>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,28 +22,32 @@ class _ReportViewState extends State<ReportView> {
         title: "Báo Cáo".text.white.size(20).fontFamily(sansSemibold).make(),
       ),
       backgroundColor: const Color.fromARGB(255, 244, 242, 242),
-      body: GridView.builder(
-          padding: const EdgeInsets.all(15),
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
-              childAspectRatio: 1.5),
-          itemCount: textLisReport.length,
-          itemBuilder: ((context, index) {
-            return ReportCell(
-                icon: iconListReport[index],
-                title: textLisReport[index],
-                onPressed: () {
-                  switch (index) {
-                    case 0:
-                      Get.to(() => const ReportDetails());
-                    case 7:
-                      splashVM.logout();
-                  }
-                });
-          })),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: GridView.builder(
+          shrinkWrap: true,
+            padding: const EdgeInsets.all(15),
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 15,
+                mainAxisSpacing: 15,
+                childAspectRatio: 1.5),
+            itemCount: textLisReport.length,
+            itemBuilder: ((context, index) {
+              return ReportCell(
+                  icon: iconListReport[index],
+                  title: textLisReport[index],
+                  onPressed: () {
+                    switch (index) {
+                      case 0:
+                        Get.to(() => const ReportDetails());
+                      case 7:
+                        // splashVM.logout();
+                    }
+                  });
+            })),
+      ),
     );
   }
 }
