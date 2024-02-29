@@ -1,6 +1,6 @@
 from rest_framework import serializers  
 from django.contrib.auth import get_user_model
-from .models import Account
+from .models import UserDetails, Account, Category, CategoryDetails, Pay
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,17 +11,48 @@ class UserSerializer(serializers.ModelSerializer):
 class UserViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()  # Sử dụng get_user_model() để lấy model User chính xác
-        fields = ('id', 'first_name', 'last_name', 'type', 'email', 'mobile', 'mobile_code', 'access_token', 'refresh_token', 'access_token_expiration', 'refresh_token_expiration', 'reset_code', 'number_coins')
+        fields = ('id', 'first_name', 'last_name', 'type', 'email', 'mobile', 'mobile_code', 'access_token', 'refresh_token', 'access_token_expiration', 'refresh_token_expiration', 'reset_code',)
 
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
 
+class UserDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserDetails
+        fields = '__all__'
+
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
+        fields = ('account_id', 'user_id', 'ac_name', 'ac_money', 'ac_type', 'ac_explanation',)
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
         fields = '__all__'
 
+class CategoryDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryDetails
+        fields = '__all__'
+
+#  Thêm dữ liệu cho Bảng Pay
+class PayAddSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pay
+        fields = ('user_id', 'category_details_id', 'account_id', 'p_type', 'p_money', 'p_explanation', 'p_date',)
+
+class PayViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pay
+        fields = ('pay_id', 'user_id', 'category_details_id', 'account_id', 'p_type', 'p_money', 'p_explanation', 'p_date', 'p_status', 'p_modify_date',)
+
+# API Điều chỉnh số dư
+class BalanceAdjustmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ('ac_money')
 
 # class UserSerializer(serializers.ModelSerializer):
 #     class Meta:

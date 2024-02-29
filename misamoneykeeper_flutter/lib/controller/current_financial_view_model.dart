@@ -18,7 +18,6 @@ class CurrentFinancialViewModel extends GetxController {
           return ReportAccount.fromJson(oObj);
         }).toList();
       }
-      print(data.length);
     }, failure: (err) async {
       Get.snackbar(appname, err.toString());
     });

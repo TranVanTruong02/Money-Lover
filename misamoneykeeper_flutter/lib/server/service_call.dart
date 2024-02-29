@@ -59,9 +59,8 @@ class ServiceCall {
     }
   }
 }
-
-void service(Map<String, dynamic> parameter, String path, bool isToken,
-    ResSuccess? withSuccess, ResFailure? failure) {
+Future<void> service(Map<String, dynamic> parameter, String path, bool isToken,
+    ResSuccess? withSuccess, ResFailure? failure) async {
   // Đặt tiêu đề mặc định với Content-Type
   var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
 
@@ -70,7 +69,7 @@ void service(Map<String, dynamic> parameter, String path, bool isToken,
     headers["Authorization"] = token != null ? "Bearer $token" : "";
   }
   // Sử dụng gói http để gửi yêu cầu POST với các tham số và tiêu đề được cung cấp
-  http.post(Uri.parse(path), body: parameter, headers: headers).then((value) {
+  await http.post(Uri.parse(path), body: parameter, headers: headers).then((value) {
     if (kDebugMode) {
       // Nếu lỗi
       print(value.body);

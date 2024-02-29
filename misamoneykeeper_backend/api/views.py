@@ -7,8 +7,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .serializers import UserSerializer, UserViewSerializer, UserLoginSerializer, AccountSerializer
-from .models import Account
+from .serializers import UserSerializer, UserViewSerializer, UserLoginSerializer, AccountSerializer, PayAddSerializer, PayViewSerializer, BalanceAdjustmentSerializer
+from .models import User, Account, CategoryDetails
 from rest_framework_simplejwt.tokens import RefreshToken
 # Tạo nhóm và gán quyền cho người dùng
 
@@ -188,6 +188,82 @@ class AccountView(APIView):
             'payload': serializer.data
         }
         return Response(data)
+
+# API màn hình Add Thu/Chi
+class PayAddView(APIView):
+    def post(self, request):
+
+        data=request.data
+
+        user_id = data.get('user_id')
+        category_details_id = data.get('category_details_id')
+        account_id = data.get('account_id')
+        if not User.objects.filter(id=user_id).exists():
+                return Response({
+                    'error_message': 'Người dùng không tồn tại',
+                    'error_code': 400,
+                }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            if not CategoryDetails.objects.filter(category_details_id=category_details_id).exists(): 
+                return Response({
+                    'error_message': 'Hạng mục không tồn tại',
+                    'error_code': 400,
+                }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                if not Account.objects.filter(account_id=account_id).exists():
+                    return Response({
+                        'error_message': 'Ví không tồn tại',
+                        'error_code': 400,
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    serializer = PayAddSerializer(data=request.data)
+                    if serializer.is_valid():
+
+                        pay = serializer.save()
+                        data = {
+                            'status': 1,
+                            'payload': PayViewSerializer(pay).data,
+                            'message': "Bạn đã thêm khoản thu/chi thành công!"
+                        }
+                        return Response(data, status=status.HTTP_200_OK)
+                    return Response({
+                        'error_messages': serializer.errors,
+                        'error_code': 400
+                    }, status=status.HTTP_400_BAD_REQUEST)
+
+# API điều chỉnh số dư
+class BalanceAdjustmentView(APIView):
+    def put(self, request):
+
+        data=request.data
+
+        account_id = data.get('account_id')
+        user_id = data.get('user_id')
+        if not Account.objects.filter(account_id=account_id).exists():
+                return Response({
+                    'error_message': 'Ví không tồn tại',
+                    'error_code': 400,
+                }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            if not User.objects.filter(id=user_id).exists():
+                return Response({
+                    'error_message': 'Người dùng không tồn tại',
+                    'error_code': 400,
+                }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                serializer = BalanceAdjustmentSerializer(data=request.data)
+                if serializer.is_valid():
+                        balance = serializer.save()
+                        data = {
+                            'status': 1,
+                            'payload': AccountSerializer(balance).data,
+                            'message': "Bạn đã thay đổi số dư thành công"
+                        }
+                        return Response(data, status=status.HTTP_200_OK)
+                return Response({
+                    'error_messages': serializer.errors,
+                    'error_code': 400
+                }, status=status.HTTP_400_BAD_REQUEST)
 
 
 

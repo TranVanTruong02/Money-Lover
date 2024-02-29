@@ -1,25 +1,53 @@
 from django.contrib import admin
-from .models import User, Account
+from .models import User, UserDetails, Account, Category, CategoryDetails, Pay
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    # Tùy chỉnh hiển thị và quản lý User trong admin
-    list_display = ('id', 'type', 'email', 'mobile', 'number_coins', 'modify_date')
-    search_fields = ('email', 'mobile')
+    list_display = ('id', 'first_name', 'last_name', 'type', 'email', 'mobile', 'last_login', 'is_active', 'modify_date',)
+    search_fields = ('last_name', 'email',)
     list_filter = ('type',)
     ordering = ('id',)
-    readonly_fields = ['id', 'type', 'email', 'modify_date']
+    readonly_fields = ['id', 'is_superuser', 'last_login', 'is_active', 'modify_date']
+
+@admin.register(UserDetails)
+class UserDetailsAdmin(admin.ModelAdmin):
+    list_display = ('user_details_id', 'user_id', 'u_name', 'u_image', 'u_sdt', 'u_gender', 'u_birthday', 'u_address', 'u_status', 'u_modify_date',)
+    search_fields = ('user_details_id', 'u_name',)
+    list_filter = ('user_details_id',)
+    ordering = ('user_details_id',)
+    readonly_fields = ['user_details_id', 'u_status', 'u_created_date', 'u_modify_date']
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('account_id', 'user_id', 'ac_name', 'ac_money', 'ac_type', 'ac_explanation', 'ac_modify_date')
-    search_fields = ('account_id', 'ac_name')
+    list_display = ('account_id', 'user_id', 'ac_name', 'ac_money', 'ac_type', 'ac_explanation', 'ac_modify_date',)
+    search_fields = ('account_id', 'ac_name',)
     list_filter = ('ac_type',)
     ordering = ('account_id',)
-    readonly_fields = ['account_id', 'user_id', 'ac_type', 'ac_modify_date']
+    readonly_fields = ['account_id', 'ac_status', 'ac_modify_date', 'ac_modify_date']
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('category_id', 'ca_name', 'ca_image', 'ca_explanation', 'ca_status', 'ca_modify_date',)
+    search_fields = ('category_id', 'ca_name',)
+    list_filter = ('ca_name',)
+    ordering = ('category_id',)
+    readonly_fields = ['category_id', 'ca_status', 'ca_modify_date', 'ca_modify_date']
+
+@admin.register(CategoryDetails)
+class CategoryDetailsAdmin(admin.ModelAdmin):
+    list_display = ('category_details_id', 'category_id', 'cad_type', 'cad_name', 'cad_image', 'cad_explanation', 'cad_status', 'cad_modify_date',)
+    search_fields = ('category_details_id', 'category_id', 'cad_name',)
+    list_filter = ('category_details_id', 'cad_type',)
+    ordering = ('category_details_id',)
+    readonly_fields = ['category_details_id', 'cad_status', 'cad_created_date', 'cad_modify_date']
     
-
-
+@admin.register(Pay)
+class PayAdmin(admin.ModelAdmin):
+    list_display = ('pay_id', 'user_id', 'category_details_id', 'account_id', 'p_type', 'p_money', 'p_explanation', 'p_date', 'p_status', 'p_modify_date',)
+    search_fields = ('pay_id', 'user_id', 'p_type',)
+    list_filter = ('p_type',)
+    ordering = ('pay_id',)
+    readonly_fields = ['pay_id', 'p_status', 'p_created_date', 'p_modify_date']
 
 # # list_display: Xác định các trường được hiển thị trong danh sách đối tượng.
 # # list_filter: Tạo bộ lọc bên cạnh danh sách đối tượng để lọc theo các trường cụ thể.
