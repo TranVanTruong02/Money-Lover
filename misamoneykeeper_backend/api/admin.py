@@ -19,7 +19,7 @@ class UserDetailsAdmin(admin.ModelAdmin):
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('account_id', 'user_id', 'ac_name', 'ac_money', 'ac_type', 'ac_explanation', 'ac_modify_date',)
+    list_display = ('account_id', 'user_id', 'ac_name', 'ac_money', 'ac_type', 'ac_explanation', 'ac_status', 'ac_modify_date',)
     search_fields = ('account_id', 'ac_name',)
     list_filter = ('ac_type',)
     ordering = ('account_id',)

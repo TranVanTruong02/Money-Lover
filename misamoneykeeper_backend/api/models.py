@@ -104,7 +104,7 @@ class Pay(models.Model):
     p_type = models.PositiveIntegerField(default=1, help_text='1: Chi tiền, 2: Thu tiền, ...')
     p_money = models.IntegerField(default=0)
     p_explanation = models.CharField(max_length = 1000, default = '')
-    p_date = models.DateTimeField()
+    p_date = models.DateField()
     p_status = models.IntegerField(default=1, help_text='1: active, 2: deleted')
     p_created_date = models.DateTimeField(auto_now_add=True)
     p_modify_date = models.DateTimeField(auto_now=True)
@@ -114,6 +114,24 @@ class Pay(models.Model):
 
     class Meta:
         db_table = 'Pay'
+
+# class Saving(models.Model):
+#     saving_id = models.AutoField(primary_key=True)
+#     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+#     s_name = models.CharField(max_length = 100, default = '')
+#     ac_money = models.IntegerField(default=0)
+#     ac_type = models.PositiveIntegerField(default=1, help_text='1: Tiền mặt, 2: Tài khoản ngân hàng, ...')
+#     ac_explanation = models.CharField(max_length = 1000, default = '')
+#     ac_status = models.IntegerField(default=1, help_text='1: active, 2: deleted')
+#     ac_created_date = models.DateTimeField(auto_now_add=True)
+#     ac_modify_date = models.DateTimeField(auto_now=True)
+
+#     def __str__(self):
+#         return self.s_name
+
+#     class Meta:
+        # db_table = 'Saving'
+
 
 
 # AutoField: Một trường số nguyên tự động tăng, thường được sử dụng cho các trường khóa chính.
