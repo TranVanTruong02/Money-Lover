@@ -1,4 +1,3 @@
-import 'package:misamoneykeeper_flutter/common/report_row.dart';
 import 'package:misamoneykeeper_flutter/controller/current_financial_view_model.dart';
 import 'package:misamoneykeeper_flutter/model/report_account.dart';
 import 'package:misamoneykeeper_flutter/server/loading_indicator.dart';
@@ -13,6 +12,7 @@ class CurrentFinancial extends StatefulWidget {
 
 class _CurrentFinancialState extends State<CurrentFinancial> {
   late CurrentFinancialViewModel currentFinancialVM;
+  late Stream<List<ReportAccount>?> dataStream;
 
   @override
   void initState() {
@@ -28,17 +28,34 @@ class _CurrentFinancialState extends State<CurrentFinancial> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: FutureBuilder<List<ReportAccount>>(
-      future: currentFinancialVM.serviceCallList(),
+    return Scaffold(
+        body: StreamBuilder<List<ReportAccount>?>(
+      stream: currentFinancialVM.dataStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: loadingIndicator());
+        } else if (snapshot.hasError) {
           return Container(
             color: Colors.amber,
           );
+        } else if (snapshot.hasData) {
+          var data = snapshot.data;
+          return Column(
+            children: [
+              "Hihi".text.make(),
+              "oki: ${data![0].acName}".text.make(),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return "oki: ${data![index].acName}".text.make();
+                },
+              )
+            ],
+          );
         } else {
           return Container(
-            color: const Color.fromARGB(255, 108, 103, 88),
+            color: Color.fromARGB(255, 63, 52, 18),
           );
         }
       },

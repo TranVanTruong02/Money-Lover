@@ -23,7 +23,7 @@ class LoginViewModel extends GetxController {
     ServiceCall.post({
       "email": txtEmail.value.text,
       "password": txtPassword.value.text,
-    }, SVKey.svLogin, login: true, withSuccess: (resObj) async {
+    }, SVKey.svLogin, withSuccess: (resObj) async {
       isLoading(false);
       if (resObj[KKey.status] == 1) {
         var payload = resObj[KKey.payload] as Map? ?? {};

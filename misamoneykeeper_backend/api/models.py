@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from datetime import date
 
 # Table User
 class User(AbstractUser):
@@ -29,7 +30,7 @@ class User(AbstractUser):
 
 class UserDetails(models.Model):
     user_details_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
     u_name = models.CharField(max_length = 100, default = '')
     u_image = models.ImageField(upload_to='images', null=False, default=None)
     u_sdt = models.CharField(max_length = 20, default = '')
@@ -49,7 +50,7 @@ class UserDetails(models.Model):
 
 class Account(models.Model):
     account_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
     ac_name = models.CharField(max_length = 100, default = '')
     ac_money = models.IntegerField(default=0)
     ac_type = models.PositiveIntegerField(default=1, help_text='1: Tiền mặt, 2: Tài khoản ngân hàng, ...')
@@ -81,7 +82,7 @@ class Category(models.Model):
 
 class CategoryDetails(models.Model):
     category_details_id = models.AutoField(primary_key=True)
-    category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category_id = models.ForeignKey(Category, on_delete=models.CASCADE, default=0)
     cad_type = models.PositiveIntegerField(default=1, help_text='1: Chi tiền, 2: Thu tiền, ...')
     cad_name = models.CharField(max_length = 100, default = '')
     cad_image = models.ImageField(upload_to='images', null=False, default=None)
@@ -98,13 +99,13 @@ class CategoryDetails(models.Model):
 
 class Pay(models.Model):
     pay_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    category_details_id = models.ForeignKey(CategoryDetails, on_delete=models.CASCADE)
-    account_id = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    category_details_id = models.ForeignKey(CategoryDetails, on_delete=models.CASCADE, default=0)
+    account_id = models.ForeignKey(Account, on_delete=models.CASCADE, default=0)
     p_type = models.PositiveIntegerField(default=1, help_text='1: Chi tiền, 2: Thu tiền, ...')
     p_money = models.IntegerField(default=0)
     p_explanation = models.CharField(max_length = 1000, default = '')
-    p_date = models.DateField()
+    p_date = models.DateField(default=date.today)
     p_status = models.IntegerField(default=1, help_text='1: active, 2: deleted')
     p_created_date = models.DateTimeField(auto_now_add=True)
     p_modify_date = models.DateTimeField(auto_now=True)
@@ -117,21 +118,38 @@ class Pay(models.Model):
 
 # class Saving(models.Model):
 #     saving_id = models.AutoField(primary_key=True)
-#     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+#     user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+#     account_id = models.ForeignKey(Account, on_delete=models.CASCADE, default=0)
 #     s_name = models.CharField(max_length = 100, default = '')
-#     ac_money = models.IntegerField(default=0)
-#     ac_type = models.PositiveIntegerField(default=1, help_text='1: Tiền mặt, 2: Tài khoản ngân hàng, ...')
-#     ac_explanation = models.CharField(max_length = 1000, default = '')
-#     ac_status = models.IntegerField(default=1, help_text='1: active, 2: deleted')
-#     ac_created_date = models.DateTimeField(auto_now_add=True)
-#     ac_modify_date = models.DateTimeField(auto_now=True)
+#     s_money = models.IntegerField(default=0)
+#     s_date_begin = models.DateField(default=date.today)
+#     s_date_end = models.DateField(default=date.today)
+#     s_status = models.IntegerField(default=1, help_text='1: active, 2: deleted')
+#     s_created_date = models.DateTimeField(auto_now_add=True)
+#     s_modify_date = models.DateTimeField(auto_now=True)
 
 #     def __str__(self):
 #         return self.s_name
 
 #     class Meta:
-        # db_table = 'Saving'
+#         db_table = 'Saving'
 
+# class Transfer(models.Model):
+#     transfer_id = models.AutoField(primary_key=True)
+#     account_id = models.ForeignKey(Account, on_delete=models.CASCADE, default=0)
+#     to_account_id = models.ForeignKey(Account, on_delete=models.CASCADE, default=0)
+#     saving_id = models.ForeignKey(Saving, on_delete=models.CASCADE, default=0)
+#     tr_money = models.IntegerField(default=0)
+#     tr_date = models.DateField(default=date.today)
+#     tr_status = models.IntegerField(default=1, help_text='1: active, 2: deleted')
+#     tr_created_date = models.DateTimeField(auto_now_add=True)
+#     tr_modify_date = models.DateTimeField(auto_now=True)
+
+#     def __str__(self):
+#         return self.tr_money
+
+#     class Meta:
+#         db_table = 'Transfer'
 
 
 # AutoField: Một trường số nguyên tự động tăng, thường được sử dụng cho các trường khóa chính.

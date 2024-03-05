@@ -47,7 +47,7 @@ class UserRegisterAdmin(APIView):
                     'payload': UserViewSerializer(user).data,
                     'message': "Bạn đã đăng kí tài khoản admin thành công"
                 }
-                return Response(data, status=status.HTTP_201_CREATED)
+                return JsonResponse(data, status=status.HTTP_201_CREATED)
             else:
                 return JsonResponse({
                     'error_message': 'Dữ liệu không hợp lệ.',
@@ -90,7 +90,7 @@ class UserRegisterView(APIView):
                     'payload': UserViewSerializer(user).data,
                     'message': "Bạn đã đăng kí thành công"
                 }
-                return Response(data, status=status.HTTP_201_CREATED)
+                return JsonResponse(data, status=status.HTTP_201_CREATED)
             else:
                 return JsonResponse({
                     'error_message': 'Dữ liệu không hợp lệ.',
@@ -123,7 +123,7 @@ class UserLoginView(APIView):
                     'payload': UserViewSerializer(user).data,
                     'message': "Bạn đã đăng nhập thành công"
                 }
-                return Response(data, status=status.HTTP_200_OK)
+                return JsonResponse(data, status=status.HTTP_200_OK)
 
             return Response({
                 'error_message': 'Email hoặc mật khẩu không đúng!',
@@ -167,7 +167,7 @@ class RefreshAccessToken(APIView):
                 'payload': UserSerializer(user).data,
                 'message': "Cập nhập access token thành công"
             }
-            return Response(data, status=status.HTTP_200_OK)
+            return JsonResponse(data, status=status.HTTP_200_OK)
             
         return Response({'error': 'refresh token không hợp lệ'}, status=400)
 
@@ -206,7 +206,7 @@ class PayAddView(APIView):
                             'payload': PayViewSerializer(pay).data,
                             'message': "Bạn đã thêm khoản thu/chi thành công!"
                         }
-                        return Response(data, status=status.HTTP_200_OK)
+                        return JsonResponse(data, status=status.HTTP_200_OK)
                     return Response({
                         'error_messages': serializer.errors,
                         'error_code': 400
@@ -241,7 +241,7 @@ class BalanceAdjustmentView(APIView):
                         'payload': AccountSerializer(account).data,
                         'message': "Bạn đã thay đổi số dư thành công"
                     }
-                    return Response(data, status=status.HTTP_200_OK)
+                    return JsonResponse(data, status=status.HTTP_200_OK)
                 return Response({
                     'error_messages': serializer.errors,
                     'error_code': 400
@@ -269,7 +269,7 @@ class CategoryView(APIView):
                 'payload': list(categorySerializer),
                 'message': "Bạn đã lấy ra dữ liệu hạng mục thành công"
             }
-            return Response(data)
+            return JsonResponse(data)
     
 # API Lịch sử ghi chép
 class HistoryView(APIView):
@@ -343,7 +343,7 @@ class HistoryView(APIView):
                     'payload': list(data1),
                     'message': "Bạn đã lấy ra dữ liệu lịch sử ghi chép thành công"
                 }
-                return Response(data3)
+                return JsonResponse(data3)
 
 # API Ghi chép gần đây
 class RecentNotesView(APIView):
@@ -394,7 +394,7 @@ class RecentNotesView(APIView):
                 'payload': list(data1),
                 'message': "Bạn đã lấy ra dữ liệu lịch sử ghi chép thành công"
             }
-            return Response(data3)
+            return JsonResponse(data3)
 
 # API Hiển thị tài khoản (ví)
 class AccountView(APIView):
@@ -419,7 +419,7 @@ class AccountView(APIView):
                     'payload': serializer.data,
                     'message': "Bạn đã lấy thông tin tài khoản thành công"
                 }
-                return Response(data)
+                return JsonResponse(data)
         
 # API Thêm tài khoản (ví)
 class AccountAddView(APIView):
@@ -439,7 +439,7 @@ class AccountAddView(APIView):
                     'payload': serializer.data,
                     'message': "Chúc mừng bạn đã đăng kí tài khoản (ví) thành công"
                 }
-                return Response(data, status=status.HTTP_201_CREATED)
+                return JsonResponse(data, status=status.HTTP_201_CREATED)
             return Response({
                 'error_messages': serializer.errors,
                 'error_code': 400
@@ -476,7 +476,7 @@ class AccountUpdateView(APIView):
                         'payload': AccountSerializer(account).data,
                         'message': "Bạn đã cập nhật thông tin tài khoản (ví) thành công"
                     }
-                    return Response(data, status=status.HTTP_200_OK)
+                    return JsonResponse(data, status=status.HTTP_200_OK)
                 return Response({
                     'error_messages': serializer.errors,
                     'error_code': 400
@@ -506,7 +506,7 @@ class AccountDeleteView(APIView):
                     'status': 1,
                     'message': "Bạn đã xóa tài khoản (ví) thành công"
                 }
-                return Response(data, status=status.HTTP_200_OK)
+                return JsonResponse(data, status=status.HTTP_200_OK)
 
 # API Ngừng sử dụng tài khoản (ví)
 class AccountStopUsingView(APIView):
@@ -536,7 +536,7 @@ class AccountStopUsingView(APIView):
                         'payload': AccountSerializer(account).data,
                         'message': "Bạn đã sử dụng/ngừng sử dụng tài khoản (ví) thành công"
                     }
-                    return Response(data, status=status.HTTP_200_OK)
+                    return JsonResponse(data, status=status.HTTP_200_OK)
                 return Response({
                     'error_messages': serializer.errors,
                     'error_code': 400

@@ -138,8 +138,8 @@ AUTH_USER_MODEL = 'api.User'
 # }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=60),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
 
@@ -157,8 +157,8 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=120),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=10),
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=60),
 }
 
 
@@ -166,6 +166,7 @@ SIMPLE_JWT = {
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
+DEFAULT_CHARSET = 'utf-8'
 LANGUAGE_CODE = 'vi'
 
 # Cấu hình tiếng việt

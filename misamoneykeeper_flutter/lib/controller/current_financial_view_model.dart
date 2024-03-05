@@ -1,26 +1,33 @@
-import 'package:misamoneykeeper_flutter/controller/splash_view_model.dart';
+import 'dart:async';
+
 import 'package:misamoneykeeper_flutter/model/report_account.dart';
 import 'package:misamoneykeeper_flutter/server/globs.dart';
 import 'package:misamoneykeeper_flutter/server/service_call.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
 
 class CurrentFinancialViewModel extends GetxController {
-  final splashVM = Get.find<SplashViewModel>();
+  CurrentFinancialViewModel() {
+    serviceCallList();
+  }
 
-  //ServiceCall
-  Future<List<ReportAccount>> serviceCallList() async {
-    List<ReportAccount> data = [];
+  // //ServiceCall
+  StreamController<List<ReportAccount>> streamController =
+      StreamController<List<ReportAccount>>();
+  void serviceCallList() async {
     await ServiceCall.post({
       "user_id": "2",
     }, SVKey.svReportAccount, isToken: true, withSuccess: (resObj) async {
       if (resObj[KKey.status] == 1) {
-        data = (resObj[KKey.payload] as List? ?? []).map((oObj) {
+        var data = (resObj[KKey.payload] as List? ?? []).map((oObj) {
           return ReportAccount.fromJson(oObj);
         }).toList();
+        streamController.add(data);
       }
     }, failure: (err) async {
       Get.snackbar(appname, err.toString());
     });
-    return data;
   }
+
+  // // Lắng nghe sự thay đổi của streamController
+  Stream<List<ReportAccount>?> get dataStream => streamController.stream;
 }
