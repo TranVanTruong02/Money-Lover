@@ -116,6 +116,13 @@ class Pay(models.Model):
     class Meta:
         db_table = 'Pay'
 
+
+
+
+
+
+
+
 # class Saving(models.Model):
 #     saving_id = models.AutoField(primary_key=True)
 #     user_id = models.ForeignKey(User, on_delete=models.CASCADE, default=0)

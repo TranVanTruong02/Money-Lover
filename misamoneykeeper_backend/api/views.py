@@ -542,6 +542,3 @@ class AccountStopUsingView(APIView):
                     'error_code': 400
                 }, status=status.HTTP_400_BAD_REQUEST)
     
-# API hiển thị số tiết kiệm
-    
-# API thêm sổ tiết kiệm
