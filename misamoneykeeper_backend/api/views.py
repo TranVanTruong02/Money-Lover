@@ -10,7 +10,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .serializers import UserSerializer, UserViewSerializer, UserLoginSerializer, AccountSerializer, CategorySerializer, CategoryDetailsSerializer, PayAddSerializer, PayViewSerializer, PayHistorySerializer, BalanceAdjustmentSerializer, AccountUpdateSerializer
 from .models import User, Account, Category, CategoryDetails, Pay
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.db.models import Prefetch, Sum, Q
+from django.db.models import Sum, Q, Case, When, Value
 # Tạo nhóm và gán quyền cho người dùng
 
 # Tạo User Admin
@@ -253,12 +253,13 @@ class CategoryView(APIView):
         data = request.data
         cad_type = data.get('cad_type')
         category = Category.objects.order_by('category_id') # Sắp xếp giảm dần có dấu trừ đằng trc ('-account_id')
-        if not Account.objects.filter(cad_type=cad_type).exists():
+        if not CategoryDetails.objects.filter(cad_type=cad_type).exists():
             return Response({
                 'error_message': 'Loại hạng mục không tồn tại',
                     'error_code': 400,
             }, status=status.HTTP_400_BAD_REQUEST)
         else:
+            category = Category.objects.filter(ca_type=cad_type).order_by('category_id')
             categoryDetails = CategoryDetails.objects.filter(cad_type=cad_type).order_by('category_details_id')
             categorySerializer = CategorySerializer(category, many=True).data # many=True, Serializer sẽ xử lý một danh sách (list)
             categoryDetailsSerializer = CategoryDetailsSerializer(categoryDetails, many=True).data # .data để danh sách dữ liệu sau khi serializer đã xử lý xong
@@ -268,6 +269,26 @@ class CategoryView(APIView):
                 'status': 1,
                 'payload': list(categorySerializer),
                 'message': "Bạn đã lấy ra dữ liệu hạng mục thành công"
+            }
+            return JsonResponse(data)
+
+# Hiển thị hạng mục thu
+class CategoryCollectView(APIView):
+    def post(self, request):
+        data = request.data
+        cad_type = data.get('cad_type')
+        if not CategoryDetails.objects.filter(cad_type=cad_type).exists():
+            return Response({
+                'error_message': 'Loại hạng mục không tồn tại',
+                    'error_code': 400,
+            }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            categoryDetails = CategoryDetails.objects.filter(cad_type=cad_type).order_by('category_details_id')
+            categoryDetailsSerializer = CategoryDetailsSerializer(categoryDetails, many=True).data 
+            data = {
+                'status': 1,
+                'payload': list(categoryDetailsSerializer),
+                'message': "Bạn đã lấy ra dữ liệu loại hạng mục thu thành công"
             }
             return JsonResponse(data)
     
@@ -345,6 +366,39 @@ class HistoryView(APIView):
                 }
                 return JsonResponse(data3)
 
+# API Ghi chấp gần đây Home
+class RecentNotesHomeView(APIView):
+    def post(self, request):
+        data = request.data
+        user_id = data.get('user_id')
+        if not Pay.objects.filter(user_id=user_id).exists():
+            return Response({
+                'error_message': 'Không có dữ liệu thu/chi nào',
+                'error_code': 400,
+            }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            category = Pay.objects.filter(user_id=user_id).prefetch_related(
+                'category_details_id', 'account_id'
+            ).order_by('-p_date')[:3] # Lấy 3 phần tử thôi
+
+            data1 = []
+            for c in category:
+                data1.append({
+                    'category_details_id': c.category_details_id.category_details_id,
+                    'category_name': c.category_details_id.cad_name,
+                    'cad_image': c.category_details_id.cad_image.url, 
+                    'p_type': c.p_type,
+                    'p_money': c.p_money,
+                    'p_date': c.p_date.strftime("%d/%m"), 
+                    'ac_name': c.account_id.ac_name
+                })
+            data2 = {
+                'status': 1,
+                'payload': list(data1),
+                'message': "Bạn đã lấy ra dữ liệu ghi chép gần đây thành công"
+            }
+            return JsonResponse(data2)
+
 # API Ghi chép gần đây
 class RecentNotesView(APIView):
     def post(self, request):
@@ -357,6 +411,8 @@ class RecentNotesView(APIView):
                 'error_code': 400,
             }, status=status.HTTP_400_BAD_REQUEST)
         else:
+            
+            # Details
             pay = Pay.objects.filter(user_id=user_id, p_date__month=month).values('p_date'
             ).annotate(
                 sum_money_pay=Sum('p_money', filter=Q(p_type=1)),
@@ -365,7 +421,8 @@ class RecentNotesView(APIView):
             data1 = []
             for p in pay:
                 data1.append({
-                    'p_date': p['p_date'].strftime("%Y-%m-%d"),
+                    'p_date': p['p_date'].strftime("%d/%m"),
+                    'p_money_type': 1 if p['sum_money_pay'] is not None else 2,
                     'p_money_pay': p['sum_money_pay'] if p['sum_money_pay'] is not None else 0, 
                     'p_money_collect': p['sum_money_collect'] if p['sum_money_collect'] is not None else 0, 
                 })
@@ -377,7 +434,7 @@ class RecentNotesView(APIView):
             data2 = []
             for c in category:
                 data2.append({
-                    'p_date': c.p_date.strftime("%Y-%m-%d"), 
+                    'p_date': c.p_date.strftime("%d/%m"), 
                     'category_details_id': c.category_details_id.category_details_id,
                     'category_name': c.category_details_id.cad_name,
                     'cad_image': c.category_details_id.cad_image.url, 
@@ -388,11 +445,10 @@ class RecentNotesView(APIView):
 
             for a in data1:
                 a['category'] = [b for b in data2 if b['p_date'] == a['p_date']]
-            
             data3 = {
                 'status': 1,
                 'payload': list(data1),
-                'message': "Bạn đã lấy ra dữ liệu lịch sử ghi chép thành công"
+                'message': "Bạn đã lấy ra dữ liệu ghi chép gần đây thành công"
             }
             return JsonResponse(data3)
 

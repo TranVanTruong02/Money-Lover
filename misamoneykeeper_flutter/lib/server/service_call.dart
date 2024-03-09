@@ -3,11 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:misamoneykeeper_flutter/controller/splash_view_model.dart';
-import 'package:misamoneykeeper_flutter/model/user_model.dart';
-import 'package:misamoneykeeper_flutter/server/globs.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
-
-final splashVM = Get.put(SplashViewModel());
 
 typedef ResSuccess = Future<void> Function(Map<String, dynamic>);
 

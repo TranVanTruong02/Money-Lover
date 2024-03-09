@@ -48,7 +48,7 @@ class _CurrentFinancialState extends State<CurrentFinancial> {
                 shrinkWrap: true,
                 itemCount: data.length,
                 itemBuilder: (context, index) {
-                  return "oki: ${data![index].acName}".text.make();
+                  return "oki: ${data[index].acName}".text.make();
                 },
               )
             ],

@@ -27,7 +27,7 @@ class AccountAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('category_id', 'ca_name', 'ca_image', 'ca_explanation', 'ca_status', 'ca_modify_date',)
+    list_display = ('category_id', 'ca_type', 'ca_name', 'ca_image', 'ca_explanation', 'ca_status', 'ca_modify_date',)
     search_fields = ('category_id', 'ca_name',)
     list_filter = ('ca_name',)
     ordering = ('category_id',)

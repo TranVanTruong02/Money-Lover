@@ -48,12 +48,12 @@ class BalanceAdjustmentSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('category_id', 'ca_name', 'ca_image', 'ca_explanation', 'ca_status', 'ca_modify_date',)
+        fields = ('category_id', 'ca_name', 'ca_image', 'ca_explanation',)
 
 class CategoryDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoryDetails
-        fields = ('category_details_id', 'category_id', 'cad_type', 'cad_name', 'cad_image', 'cad_explanation', 'cad_status', 'cad_modify_date',)
+        fields = ('category_details_id', 'category_id', 'cad_type', 'cad_name', 'cad_image', 'cad_explanation',)
 #  API Lịch sử ghi chép
 class PayHistorySerializer(serializers.ModelSerializer):
     class Meta:
