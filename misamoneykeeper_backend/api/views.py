@@ -8,8 +8,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .serializers import UserSerializer, UserViewSerializer, UserLoginSerializer, AccountSerializer, CategorySerializer, CategoryDetailsSerializer, PayAddSerializer, PayViewSerializer, BalanceAdjustmentSerializer, AccountUpdateSerializer
-from .models import User, Account, Category, CategoryDetails, Pay
+from .serializers import UserSerializer, UserViewSerializer, UserDetailsSerializer, UserLoginSerializer, AccountSerializer, CategorySerializer, CategoryDetailsSerializer, PayAddSerializer, PayViewSerializer, BalanceAdjustmentSerializer, AccountUpdateSerializer
+from .models import User, Account, Category, CategoryDetails, Pay, UserDetails
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.db.models import Sum, Q, Case, When, Value
 # Tạo nhóm và gán quyền cho người dùng
@@ -774,5 +774,119 @@ class UserUpdateView(APIView):
                     return JsonResponse(data, status=status.HTTP_200_OK)
             
 # API View thông tin user
+class UserProfileView(APIView):
+    def post(self, request):
+        data = request.data
+        user_id = data.get('user_id')
+        if not get_user_model().objects.filter(id=user_id).exists():
+            return Response({
+                'error_message': 'Người dùng không tồn tại',
+                'error_code': 400,
+        }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            if not UserDetails.objects.filter(user_id=user_id).exists():
+                user = get_user_model().objects.filter(id=user_id)
+                data = []
+                for c in user:
+                    data.append({
+                        'user_id': c.id,
+                        'user_details_id': '',
+                        'email': c.email,
+                        'mobile': '',
+                        'u_name': '',
+                        'u_image': '',
+                        'u_gender': '1',
+                        'u_birthday': '01-01-1990',
+                        'u_address': '',
+                        'u_job': ''
+                    })
+                data1 = {
+                   'status': 1,
+                    'payload': list(data),
+                    'message': "Bạn đã thông tin người dùng thành công"
+                }
+                return JsonResponse(data1, status=status.HTTP_200_OK)
+            else:
+                user = UserDetails.objects.filter(user_id=user_id).prefetch_related('user_id')
+                data = []
+                for c in user:
+                    data.append({
+                        'user_id': c.user_id.id,
+                        'user_details_id': c.user_details_id,
+                        'email': c.user_id.email,
+                        'mobile': c.user_id.mobile,
+                        'u_name': c.u_name,
+                        'u_image': c.u_image.url,
+                        'u_gender': c.u_gender,
+                        'u_birthday': c.u_birthday,
+                        'u_address': c.u_address,
+                        'u_job': c.u_job
+                    })
+                    data1 = {
+                        'status': 1,
+                        'payload': list(data),
+                        'message': "Bạn đã thông tin người dùng thành công"
+                    }
+                    return JsonResponse(data1, status=status.HTTP_200_OK)
 
 # API Update thông tin User
+class UserUpdateProfileView(APIView):
+    def post(self, request):
+        data = request.data
+        user_id = data.get('user_id')
+        if not get_user_model().objects.filter(id=user_id).exists():
+            return Response({
+                'error_message': 'Người dùng không tồn tại',
+                'error_code': 400,
+        }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            if not UserDetails.objects.filter(user_id=user_id).exists(): # Nếu không tìm thấy thuộc tính phụ
+                user = get_user_model().objects.get(id=user_id)
+                serializer = UserViewSerializer(instance=user, data={'email': data.get('email'), 'mobile': data.get('mobile')})
+                if serializer.is_valid():
+                    user.email = data.get('email')
+                    user.mobile = data.get('mobile')
+                    user.save()
+                # Lưu thông tin phụ
+                serializerDetails = UserDetailsSerializer(data=request.data)
+                if serializerDetails.is_valid():
+                    serializerDetails.save()
+                    data1 = {
+                        'status': 1,
+                        'payload': serializerDetails.data,
+                        'message': "Chúc mừng tạo thông tin cho user thành công"
+                    }
+                    return JsonResponse(data1, status=status.HTTP_201_CREATED)
+                return Response({
+                    'error_messages': "Có lỗi gì đó đã sảy ra với bảng user",
+                    'error_code': 400
+                }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                user = get_user_model().objects.get(id=user_id)
+                serializer = UserViewSerializer(instance=user, data={'email': data.get('email'), 'mobile': data.get('mobile')})
+                if serializer.is_valid():
+                    user.email = data.get('email')
+                    user.mobile = data.get('mobile')
+                    user.save()
+
+                    # Lưu thông tin phụ
+                    userDetails = UserDetails.objects.get(user_details_id=data.get('user_details_id'))
+                    serializerDetails = UserDetailsSerializer(instance=userDetails, data={'u_name': data.get('u_name'), 'u_gender': data.get('u_gender'), 'u_birthday': data.get('u_birthday'), 'u_address': data.get('u_address'), 'u_job': data.get('u_job')})
+                    if serializerDetails.is_valid():
+                        userDetails.u_name = data.get('u_name')
+                        userDetails.u_gender = data.get('u_gender')
+                        userDetails.u_birthday = data.get('u_birthday')
+                        userDetails.u_address = data.get('u_address')
+                        userDetails.u_job = data.get('u_job')
+                        userDetails.save()
+                    data1 = {
+                        'status': 1,
+                        'message': "Bạn đã cập nhật thông tin người dùng thành công"
+                    }
+                    return JsonResponse(data1, status=status.HTTP_200_OK)
+                return Response({
+                    'error_messages': "Có lỗi gì đó đã sảy ra",
+                    'error_code': 400
+                }, status=status.HTTP_400_BAD_REQUEST)
+                
+                

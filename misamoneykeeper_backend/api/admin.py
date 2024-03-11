@@ -11,7 +11,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(UserDetails)
 class UserDetailsAdmin(admin.ModelAdmin):
-    list_display = ('user_details_id', 'user_id', 'u_name', 'u_image', 'u_sdt', 'u_gender', 'u_birthday', 'u_address', 'u_status', 'u_modify_date',)
+    list_display = ('user_details_id', 'user_id', 'u_name', 'u_image', 'u_gender', 'u_birthday', 'u_address', 'u_job', 'u_status', 'u_modify_date',)
     search_fields = ('user_details_id', 'u_name',)
     list_filter = ('user_details_id',)
     ordering = ('user_details_id',)
