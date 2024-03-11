@@ -763,7 +763,8 @@ class UserUpdateView(APIView):
                 else:
                     serializer = UserViewSerializer(data=request.data)
                     if serializer.is_valid():
-                        user.password = data.get('new_password')
+                        # Mã hóa mật khẩu của người dùng
+                        user.password = make_password(data.get('new_password'))
                         user.save()
                         data = {
                             'status': 1,
