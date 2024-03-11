@@ -5,7 +5,28 @@ import 'package:misamoneykeeper_flutter/view/history/history_view.dart';
 
 class AddView extends StatefulWidget {
   final bool? isCheck;
-  const AddView({super.key, this.isCheck});
+  final String? categoryIcon;
+  final String? categoryTitle;
+  final int? categoryDetailsId;
+  final int? accountIcon;
+  final String? accountTitle;
+  final int? accountId;
+  final String? dateController;
+  final String? moneyAccount;
+  final String? descriptionAccount;
+
+  const AddView(
+      {super.key,
+      this.isCheck,
+      this.categoryIcon,
+      this.categoryTitle,
+      this.categoryDetailsId,
+      this.accountIcon,
+      this.accountTitle,
+      this.accountId,
+      this.dateController,
+      this.moneyAccount,
+      this.descriptionAccount});
 
   @override
   AddViewState createState() => AddViewState();
@@ -135,7 +156,32 @@ class AddViewState extends State<AddView> {
         ),
         body: IndexedStack(
           index: position,
-          children: [PayPay(isCheck: widget.isCheck), PayCollect(isCheck: widget.isCheck,)],
+          children: [
+            PayPay(
+              isCheck: widget.isCheck,
+              categoryIcon: widget.categoryIcon,
+              categoryTitle: widget.categoryTitle,
+              categoryDetailsId: widget.categoryDetailsId,
+              accountIcon: widget.accountIcon,
+              accountTitle: widget.accountTitle,
+              accountId: widget.accountId,
+              dateController: widget.dateController,
+              moneyAccount: widget.moneyAccount,
+              descriptionAccount: widget.descriptionAccount,
+            ),
+            PayCollect(
+              isCheck: widget.isCheck,
+              categoryIcon: widget.categoryIcon,
+              categoryTitle: widget.categoryTitle,
+              categoryDetailsId: widget.categoryDetailsId,
+              accountIcon: widget.accountIcon,
+              accountTitle: widget.accountTitle,
+              accountId: widget.accountId,
+              dateController: widget.dateController,
+              moneyAccount: widget.moneyAccount,
+              descriptionAccount: widget.descriptionAccount,
+            )
+          ],
         ));
   }
 }

@@ -9,6 +9,7 @@ import 'package:misamoneykeeper_flutter/utility/export.dart';
 class HistoryViewModel extends GetxController {
   var month = 0.obs;
   var isMonth = false.obs;
+  DateTime now = DateTime.now();
 
   final splashVM = Get.find<SplashViewModel>();
 
@@ -16,7 +17,8 @@ class HistoryViewModel extends GetxController {
     List<RecnetNote> recnetNote = [];
     await ServiceCall.post({
       "user_id": splashVM.userModel.value.id.toString(),
-      "month": mounth.toString()
+      "month": mounth.toString(),
+      "year": now.year.toString()
     }, SVKey.svRecnetNote, isToken: true, withSuccess: (resObj) async {
       if (resObj[KKey.status] == 1) {
         recnetNote = (resObj[KKey.payload] as List? ?? []).map((oObj) {

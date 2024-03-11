@@ -11,7 +11,7 @@ class PayCollectViewModel extends GetxController {
   var isLoading = false.obs;
 
   // Tài khoản
-  var accountIcon = ''.obs;
+  var accountIcon = 0.obs;
   var accountTitle = ''.obs;
   var accountId = 0.obs;
 
@@ -55,7 +55,7 @@ class PayCollectViewModel extends GetxController {
     categoryTitle.value = '';
     categoryDetailsId.value = 0;
     isLoading(false);
-    accountIcon.value = '';
+    accountIcon.value = 0;
     accountTitle.value = '';
     accountId.value = 0;
     dateController.value.text = '';

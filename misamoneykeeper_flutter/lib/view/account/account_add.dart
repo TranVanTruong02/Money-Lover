@@ -11,10 +11,15 @@ class AccountAdd extends StatefulWidget {
 
 class _AddAccountPageState extends State<AccountAdd> {
   final List<String> _accountTypes = ['Tiền mặt', 'Ngân hàng'];
+  var accountAddVM = Get.put(AccountAddViewModel());
+  @override
+  void initState() {
+    super.initState();
+    accountAddVM.clean();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var accountAddVM = Get.put(AccountAddViewModel());
-
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -98,7 +103,6 @@ class _AddAccountPageState extends State<AccountAdd> {
                             } else {
                               accountAddVM.accountTypeId.value = 2;
                             }
-                            print(accountAddVM.accountTypeId.value);
                           },
                         ),
                       ),

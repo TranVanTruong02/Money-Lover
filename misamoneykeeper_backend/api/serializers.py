@@ -54,11 +54,6 @@ class CategoryDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoryDetails
         fields = ('category_details_id', 'category_id', 'cad_type', 'cad_name', 'cad_image', 'cad_explanation',)
-#  API Lịch sử ghi chép
-class PayHistorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Pay
-        fields = ('pay_id', 'category_details_id', 'p_type', 'p_money', 'p_date',)
 
 # API Sửa lại tài khoản (ví)
 class AccountUpdateSerializer(serializers.ModelSerializer):

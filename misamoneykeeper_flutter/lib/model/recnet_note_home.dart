@@ -3,27 +3,36 @@ class RecnetNoteHome {
   String? categoryName;
   String? cadImage;
   int? pType;
-  int? pMoney;
   String? pDate;
+  int? pMoney;
+  String? pExplanation;
+  int? accountId;
   String? acName;
+  int? acType;
 
   RecnetNoteHome(
       {categoryDetailsId,
       categoryName,
       cadImage,
       pType,
-      pMoney,
       pDate,
-      acName});
+      pMoney,
+      pExplanation,
+      accountId,
+      acName,
+      acType});
 
   RecnetNoteHome.fromJson(Map<String, dynamic> json) {
     categoryDetailsId = json['category_details_id'];
     categoryName = json['category_name'];
     cadImage = json['cad_image'];
     pType = json['p_type'];
-    pMoney = json['p_money'];
     pDate = json['p_date'];
+    pMoney = json['p_money'];
+    pExplanation = json['p_explanation'];
+    accountId = json['account_id'];
     acName = json['ac_name'];
+    acType = json['ac_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -32,9 +41,12 @@ class RecnetNoteHome {
     data['category_name'] = categoryName;
     data['cad_image'] = cadImage;
     data['p_type'] = pType;
-    data['p_money'] = pMoney;
     data['p_date'] = pDate;
+    data['p_money'] = pMoney;
+    data['p_explanation'] = pExplanation;
+    data['account_id'] = accountId;
     data['ac_name'] = acName;
+    data['ac_type'] = acType;
     return data;
   }
 }

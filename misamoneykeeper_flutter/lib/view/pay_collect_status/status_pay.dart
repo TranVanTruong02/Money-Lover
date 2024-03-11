@@ -3,6 +3,7 @@ import 'package:misamoneykeeper_flutter/controller/status_pay_view_model.dart';
 import 'package:misamoneykeeper_flutter/server/globs.dart';
 import 'package:misamoneykeeper_flutter/server/loading_indicator.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
+import 'package:misamoneykeeper_flutter/view/add/add_view.dart';
 
 class StatusPay extends StatefulWidget {
   const StatusPay({super.key});
@@ -213,7 +214,69 @@ class _StatusPayState extends State<StatusPay> {
                                                 .margin(
                                                     const EdgeInsets.symmetric(
                                                         vertical: 2))
-                                                .make();
+                                                .make()
+                                                .onTap(() {
+                                              Get.to(
+                                                  () => AddView(
+                                                        isCheck: true,
+                                                        categoryIcon: SVKey
+                                                                .mainUrl +
+                                                            data[index]
+                                                                .categoryDetails![
+                                                                    index1]
+                                                                .pay![index2]
+                                                                .cadImage!,
+                                                        categoryTitle: data[
+                                                                index]
+                                                            .categoryDetails![
+                                                                index1]
+                                                            .pay![index2]
+                                                            .categoryName,
+                                                        categoryDetailsId: data[
+                                                                index]
+                                                            .categoryDetails![
+                                                                index1]
+                                                            .pay![index2]
+                                                            .categoryDetailsId,
+                                                        accountIcon: data[index]
+                                                            .categoryDetails![
+                                                                index1]
+                                                            .pay![index2]
+                                                            .acType,
+                                                        accountTitle: data[
+                                                                index]
+                                                            .categoryDetails![
+                                                                index1]
+                                                            .pay![index2]
+                                                            .acName,
+                                                        accountId: data[index]
+                                                            .categoryDetails![
+                                                                index1]
+                                                            .pay![index2]
+                                                            .accountId,
+                                                        dateController: data[
+                                                                index]
+                                                            .categoryDetails![
+                                                                index1]
+                                                            .pay![index2]
+                                                            .pDate,
+                                                        moneyAccount: data[
+                                                                index]
+                                                            .categoryDetails![
+                                                                index1]
+                                                            .pay![index2]
+                                                            .pMoney!
+                                                            .toString(),
+                                                        descriptionAccount: data[
+                                                                index]
+                                                            .categoryDetails![
+                                                                index1]
+                                                            .pay![index2]
+                                                            .pExplanation,
+                                                      ),
+                                                  transition:
+                                                      Transition.rightToLeft);
+                                            });
                                           },
                                         )
                                       ]);

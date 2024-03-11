@@ -3,6 +3,7 @@ import 'package:misamoneykeeper_flutter/controller/status_collect_view_model.dar
 import 'package:misamoneykeeper_flutter/server/globs.dart';
 import 'package:misamoneykeeper_flutter/server/loading_indicator.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
+import 'package:misamoneykeeper_flutter/view/add/add_view.dart';
 
 class StatusCollect extends StatefulWidget {
   const StatusCollect({super.key});
@@ -155,7 +156,53 @@ class _StatusCollectState extends State<StatusCollect> {
                                           .box
                                           .margin(const EdgeInsets.symmetric(
                                               vertical: 2))
-                                          .make();
+                                          .make()
+                                          .onTap(() {
+                                        Get.to(
+                                            () => AddView(
+                                                  isCheck: true,
+                                                  categoryIcon: SVKey.mainUrl +
+                                                      data[0]
+                                                          .categoryDetails![
+                                                              index]
+                                                          .pay![index1]
+                                                          .cadImage!,
+                                                  categoryTitle: data[0]
+                                                      .categoryDetails![index]
+                                                      .pay![index1]
+                                                      .categoryName,
+                                                  categoryDetailsId: data[0]
+                                                      .categoryDetails![index]
+                                                      .pay![index1]
+                                                      .categoryDetailsId,
+                                                  accountIcon: data[0]
+                                                      .categoryDetails![index]
+                                                      .pay![index1]
+                                                      .acType,
+                                                  accountTitle: data[0]
+                                                      .categoryDetails![index]
+                                                      .pay![index1]
+                                                      .acName,
+                                                  accountId: data[0]
+                                                      .categoryDetails![index]
+                                                      .pay![index1]
+                                                      .accountId,
+                                                  dateController: data[0]
+                                                      .categoryDetails![index]
+                                                      .pay![index1]
+                                                      .pDate,
+                                                  moneyAccount: data[0]
+                                                      .categoryDetails![index]
+                                                      .pay![index1]
+                                                      .pMoney!
+                                                      .toString(),
+                                                  descriptionAccount: data[0]
+                                                      .categoryDetails![index]
+                                                      .pay![index1]
+                                                      .pExplanation,
+                                                ),
+                                            transition: Transition.rightToLeft);
+                                      });
                                     },
                                   )
                                 : const SizedBox.shrink(),

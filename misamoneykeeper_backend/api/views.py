@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .serializers import UserSerializer, UserViewSerializer, UserLoginSerializer, AccountSerializer, CategorySerializer, CategoryDetailsSerializer, PayAddSerializer, PayViewSerializer, PayHistorySerializer, BalanceAdjustmentSerializer, AccountUpdateSerializer
+from .serializers import UserSerializer, UserViewSerializer, UserLoginSerializer, AccountSerializer, CategorySerializer, CategoryDetailsSerializer, PayAddSerializer, PayViewSerializer, BalanceAdjustmentSerializer, AccountUpdateSerializer
 from .models import User, Account, Category, CategoryDetails, Pay
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.db.models import Sum, Q, Case, When, Value
@@ -204,11 +204,11 @@ class PayAddView(APIView):
                         # Cập nhập lại số tiền trong tài khoản
                         account = Account.objects.get(account_id=account_id)
                         if data.get('p_type') == 1:
-                            money = account.ac_money - data.get('p_money')
+                            money = account.ac_money - int(data.get('p_money'))
                             account.ac_money = money
                             account.save()
                         else:
-                            money = account.ac_money + data.get('p_money')
+                            money = account.ac_money + int(data.get('p_money'))
                             account.ac_money = money
                             account.save()
                         data = {
@@ -412,21 +412,37 @@ class HistoryView(APIView):
                         'sum_money': p['sum_money']
                     })
                 # Thứ 3
-                pay = Pay.objects.filter(user_id=user_id, p_type=p_type).order_by('-p_date')
-                paySerializer = PayHistorySerializer(pay, many=True).data
+                pay = Pay.objects.filter(user_id=user_id).prefetch_related(
+                    'category_details_id', 'account_id'
+                ).order_by('-p_date')
+
+                data3 = []
+                for c in pay:
+                    data3.append({
+                        'category_details_id': c.category_details_id.category_details_id,
+                        'category_name': c.category_details_id.cad_name,
+                        'cad_image': c.category_details_id.cad_image.url, 
+                        'p_type': c.p_type,
+                        'p_date': c.p_date, 
+                        'p_money': c.p_money,
+                        'p_explanation': c.p_explanation,
+                        'account_id': c.account_id.account_id,
+                        'ac_name': c.account_id.ac_name,
+                        'ac_type': c.account_id.ac_type
+                    })
                 #  Lồng category details
                 for a in data2:
-                    a['pay'] = [b for b in paySerializer if b['category_details_id'] == a['category_details_id']]
+                    a['pay'] = [b for b in data3 if b['category_details_id'] == a['category_details_id']]
                 #  Lồng category
                 for a in data1:
                     a['category_details'] = [b for b in data2 if b['category_id'] == a['category_id']]
                 
-                data3 = {
+                data4 = {
                     'status': 1,
                     'payload': list(data1),
                     'message': "Bạn đã lấy ra dữ liệu lịch sử ghi chép thành công"
                 }
-                return JsonResponse(data3)
+                return JsonResponse(data4)
 
 # API Ghi chấp gần đây Home
 class RecentNotesHomeView(APIView):
@@ -441,25 +457,28 @@ class RecentNotesHomeView(APIView):
         else:
             category = Pay.objects.filter(user_id=user_id).prefetch_related(
                 'category_details_id', 'account_id'
-            ).order_by('-p_date')[:3] # Lấy 3 phần tử thôi
+            ).order_by('-p_date')[:3]
 
-            data1 = []
+            data = []
             for c in category:
-                data1.append({
+                data.append({
                     'category_details_id': c.category_details_id.category_details_id,
                     'category_name': c.category_details_id.cad_name,
                     'cad_image': c.category_details_id.cad_image.url, 
                     'p_type': c.p_type,
+                    'p_date': c.p_date, 
                     'p_money': c.p_money,
-                    'p_date': c.p_date.strftime("%d/%m"), 
-                    'ac_name': c.account_id.ac_name
+                    'p_explanation': c.p_explanation,
+                    'account_id': c.account_id.account_id,
+                    'ac_name': c.account_id.ac_name,
+                    'ac_type': c.account_id.ac_type
                 })
-            data2 = {
+            data1 = {
                 'status': 1,
-                'payload': list(data1),
+                'payload': list(data),
                 'message': "Bạn đã lấy ra dữ liệu ghi chép gần đây thành công"
             }
-            return JsonResponse(data2)
+            return JsonResponse(data1)
 
 # API Ghi chép gần đây
 class RecentNotesView(APIView):
@@ -467,6 +486,7 @@ class RecentNotesView(APIView):
         data = request.data
         user_id = data.get('user_id')
         month = data.get('month')
+        year = data.get('year')
         if not Pay.objects.filter(user_id=user_id).exists():
             return Response({
                 'error_message': 'Không có dữ liệu thu/chi nào',
@@ -475,7 +495,7 @@ class RecentNotesView(APIView):
         else:
             
             # Details
-            pay = Pay.objects.filter(user_id=user_id, p_date__month=month).values('p_date'
+            pay = Pay.objects.filter(user_id=user_id, p_date__month=month, p_date__year=year).values('p_date'
             ).annotate(
                 sum_money_pay=Sum('p_money', filter=Q(p_type=1)),
                 sum_money_collect=Sum('p_money', filter=Q(p_type=2))
@@ -483,7 +503,7 @@ class RecentNotesView(APIView):
             data1 = []
             for p in pay:
                 data1.append({
-                    'p_date': p['p_date'].strftime("%d/%m"),
+                    'p_date': p['p_date'],
                     'p_money_type': 1 if p['sum_money_pay'] is not None else 2,
                     'p_money_pay': p['sum_money_pay'] if p['sum_money_pay'] is not None else 0, 
                     'p_money_collect': p['sum_money_collect'] if p['sum_money_collect'] is not None else 0, 
@@ -496,13 +516,16 @@ class RecentNotesView(APIView):
             data2 = []
             for c in category:
                 data2.append({
-                    'p_date': c.p_date.strftime("%d/%m"), 
                     'category_details_id': c.category_details_id.category_details_id,
                     'category_name': c.category_details_id.cad_name,
                     'cad_image': c.category_details_id.cad_image.url, 
                     'p_type': c.p_type,
+                    'p_date': c.p_date, 
                     'p_money': c.p_money,
-                    'ac_name': c.account_id.ac_name
+                    'pp_explanation': c.p_explanation,
+                    'account_id': c.account_id.account_id,
+                    'ac_name': c.account_id.ac_name,
+                    'ac_type': c.account_id.ac_type
                 })
 
             for a in data1:

@@ -31,14 +31,22 @@ class AccountAddViewModel extends GetxController {
       if (resObj[KKey.status] == 1) {
         isLoading(false);
         isSuccess(true);
-        balanceController.value.text = "";
-        nameController.value.text = "";
-        descriptionController.value.text = "";
+
         accountViewModel.serviceCallList();
         Get.snackbar(appname, "Chúc mừng, bạn đã thêm tài khoản thành công");
       }
     }, failure: (err) async {
       Get.snackbar(appname, err.toString());
     });
+  }
+
+  void clean() {
+    balanceController.value.text = "";
+    isLoading(false);
+    isSuccess(false);
+    nameController.value.text = "";
+    descriptionController.value.text = "";
+    accountType.value = 'Tiền mặt';
+    accountTypeId.value = 1;
   }
 }

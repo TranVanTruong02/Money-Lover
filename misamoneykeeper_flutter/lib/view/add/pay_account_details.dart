@@ -49,11 +49,17 @@ class PayAccountDetails extends StatelessWidget {
                         padding: const EdgeInsets.all(8),
                         decoration: const BoxDecoration(
                             color: Colors.amber, shape: BoxShape.circle),
-                        child: Image.asset(
-                          (data[index].acType == 1 ? icReport_1 : icReport_2),
-                          width: 10,
-                          fit: BoxFit.cover,
-                        )),
+                        child: data[index].acType! == 1
+                            ? const Icon(
+                                Icons.account_balance_wallet,
+                                size: 25,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                Icons.account_balance,
+                                size: 25,
+                                color: Colors.white,
+                              )),
                     15.widthBox,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,17 +94,15 @@ class PayAccountDetails extends StatelessWidget {
                     .make()
                     .onTap(() {
                   if (type == 1) {
-                    payVM.accountIcon.value =
-                      data[index].acType == 1 ? icReport_1 : icReport_2;
-                  payVM.accountTitle.value = data[index].acName!;
-                  payVM.accountId.value = data[index].accountId!;
+                    payVM.accountIcon.value = data[index].acType!;
+                    payVM.accountTitle.value = data[index].acName!;
+                    payVM.accountId.value = data[index].accountId!;
                   } else {
-                    payVM1.accountIcon.value =
-                      data[index].acType == 1 ? icReport_1 : icReport_2;
-                  payVM1.accountTitle.value = data[index].acName!;
-                  payVM1.accountId.value = data[index].accountId!;
+                    payVM1.accountIcon.value = data[index].acType!;
+                    payVM1.accountTitle.value = data[index].acName!;
+                    payVM1.accountId.value = data[index].accountId!;
                   }
-                  
+
                   Get.back();
                 });
               },

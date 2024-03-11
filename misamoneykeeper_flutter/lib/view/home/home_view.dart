@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:misamoneykeeper_flutter/common/chart_data.dart';
 import 'package:misamoneykeeper_flutter/controller/home_view_model.dart';
 import 'package:misamoneykeeper_flutter/controller/splash_view_model.dart';
@@ -8,6 +9,7 @@ import 'package:misamoneykeeper_flutter/model/recnet_note_home.dart';
 import 'package:misamoneykeeper_flutter/server/globs.dart';
 import 'package:misamoneykeeper_flutter/server/loading_indicator.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
+import 'package:misamoneykeeper_flutter/view/add/add_view.dart';
 import 'package:misamoneykeeper_flutter/view/history/history_view.dart';
 import 'package:misamoneykeeper_flutter/view/home/home_account.dart';
 import 'package:misamoneykeeper_flutter/view/pay_collect_status/status_main.dart';
@@ -412,6 +414,12 @@ class _HomeViewState extends State<HomeView> {
                                           horizontal: 5, vertical: 5),
                                       itemCount: recnetNoteHome.length,
                                       itemBuilder: (context, index) {
+                                        final formatter =
+                                            DateFormat('dd/MM/yyyy');
+                                        DateTime date = DateTime.parse(
+                                            recnetNoteHome[index].pDate!);
+                                        String dateString =
+                                            formatter.format(date);
                                         return Row(
                                           children: [
                                             CircleAvatar(
@@ -435,8 +443,7 @@ class _HomeViewState extends State<HomeView> {
                                                     .color(Colors.black87)
                                                     .make(),
                                                 4.heightBox,
-                                                "${recnetNoteHome[index].pDate}"
-                                                    .text
+                                                dateString.text
                                                     .size(12)
                                                     .fontFamily(sansItalic)
                                                     .color(Colors.black87)
@@ -487,7 +494,44 @@ class _HomeViewState extends State<HomeView> {
                                             .box
                                             .margin(const EdgeInsets.symmetric(
                                                 vertical: 4))
-                                            .make();
+                                            .make()
+                                            .onTap(() {
+                                          Get.to(
+                                              () => AddView(
+                                                    isCheck: true,
+                                                    categoryIcon: SVKey
+                                                            .mainUrl +
+                                                        recnetNoteHome[index]
+                                                            .cadImage!,
+                                                    categoryTitle:
+                                                        recnetNoteHome[index]
+                                                            .categoryName,
+                                                    categoryDetailsId:
+                                                        recnetNoteHome[index]
+                                                            .categoryDetailsId,
+                                                    accountIcon:
+                                                        recnetNoteHome[index]
+                                                            .acType,
+                                                    accountTitle:
+                                                        recnetNoteHome[index]
+                                                            .acName,
+                                                    accountId:
+                                                        recnetNoteHome[index]
+                                                            .accountId,
+                                                    dateController:
+                                                        recnetNoteHome[index]
+                                                            .pDate,
+                                                    moneyAccount:
+                                                        recnetNoteHome[index]
+                                                            .pMoney!
+                                                            .toString(),
+                                                    descriptionAccount:
+                                                        recnetNoteHome[index]
+                                                            .pExplanation,
+                                                  ),
+                                              transition:
+                                                  Transition.rightToLeft);
+                                        });
                                       },
                                     )
                                   : const Align(

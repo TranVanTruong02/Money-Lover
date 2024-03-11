@@ -1,5 +1,4 @@
 import 'package:misamoneykeeper_flutter/controller/home_account_view_model.dart';
-import 'package:misamoneykeeper_flutter/controller/home_view_model.dart';
 import 'package:misamoneykeeper_flutter/server/loading_indicator.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
 import 'package:misamoneykeeper_flutter/view/add/add_view.dart';
@@ -48,16 +47,23 @@ class _HomeAccountState extends State<HomeAccount> {
                   return Row(
                     children: [
                       Container(
-                          width: 40,
-                          height: 40,
-                          padding: const EdgeInsets.all(8),
-                          decoration: const BoxDecoration(
-                              color: Colors.amber, shape: BoxShape.circle),
-                          child: Image.asset(
-                            (data[index].acType == 1 ? icReport_1 : icReport_2),
-                            width: 10,
-                            fit: BoxFit.cover,
-                          )),
+                        width: 40,
+                        height: 40,
+                        padding: const EdgeInsets.all(8),
+                        decoration: const BoxDecoration(
+                            color: Colors.amber, shape: BoxShape.circle),
+                        child: data[index].acType == 1
+                            ? const Icon(
+                                Icons.account_balance_wallet,
+                                size: 25,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                Icons.account_balance,
+                                size: 25,
+                                color: Colors.white,
+                              ),
+                      ),
                       15.widthBox,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +86,13 @@ class _HomeAccountState extends State<HomeAccount> {
                       const Spacer(),
                       IconButton(
                           onPressed: () {
-                            Get.to(() => const AddView(isCheck: false),
+                            Get.to(
+                                () => AddView(
+                                      isCheck: true,
+                                      accountIcon: data[index].acType,
+                                      accountTitle: data[index].acName,
+                                      accountId: data[index].accountId,
+                                    ),
                                 transition: Transition.rightToLeft);
                           },
                           icon: const Icon(Icons.navigate_next))

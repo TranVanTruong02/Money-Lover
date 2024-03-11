@@ -2,6 +2,7 @@ import 'package:misamoneykeeper_flutter/controller/history_view_model.dart';
 import 'package:misamoneykeeper_flutter/server/globs.dart';
 import 'package:misamoneykeeper_flutter/server/loading_indicator.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
+import 'package:misamoneykeeper_flutter/view/add/add_view.dart';
 import 'package:misamoneykeeper_flutter/view/history/history_month.dart';
 
 class HistoryView extends StatefulWidget {
@@ -46,8 +47,12 @@ class _HistoryViewState extends State<HistoryView> {
                               Get.to(() => const HistoryMonth(),
                                   transition: Transition.rightToLeft);
                             },
-                            child: Obx(() => 
-                                  (historyVM.isMonth.value == false ? "Tháng này" : historyVM.month.value == now.month ? "Tháng này" : "Tháng ${historyVM.month.value}")
+                            child: Obx(
+                              () => (historyVM.isMonth.value == false
+                                      ? "Tháng này"
+                                      : historyVM.month.value == now.month
+                                          ? "Tháng này"
+                                          : "Tháng ${historyVM.month.value}")
                                   .text
                                   .size(16)
                                   .fontFamily(sansBold)
@@ -64,9 +69,10 @@ class _HistoryViewState extends State<HistoryView> {
                       ).box.height(50).white.make(),
                       Obx(
                         () => FutureBuilder(
-                            future: historyVM.isMonth.value == false ? historyVM
-                                .serviceCallRecnetNote(now.month) : historyVM
-                                .serviceCallRecnetNote(historyVM.month.value),
+                            future: historyVM.isMonth.value == false
+                                ? historyVM.serviceCallRecnetNote(now.month)
+                                : historyVM.serviceCallRecnetNote(
+                                    historyVM.month.value),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -321,7 +327,62 @@ class _HistoryViewState extends State<HistoryView> {
                                                     .box
                                                     .margin(const EdgeInsets
                                                         .symmetric(vertical: 4))
-                                                    .make();
+                                                    .make()
+                                                    .onTap(() {
+                                                  Get.to(
+                                                      () => AddView(
+                                                            isCheck: true,
+                                                            categoryIcon: SVKey
+                                                                    .mainUrl +
+                                                                data[index]
+                                                                    .category![
+                                                                        index1]
+                                                                    .cadImage!,
+                                                            categoryTitle: data[
+                                                                    index]
+                                                                .category![
+                                                                    index1]
+                                                                .categoryName,
+                                                            categoryDetailsId:
+                                                                data[index]
+                                                                    .category![
+                                                                        index1]
+                                                                    .categoryDetailsId,
+                                                            accountIcon:
+                                                                data[index]
+                                                                    .category![
+                                                                        index1]
+                                                                    .acType,
+                                                            accountTitle:
+                                                                data[index]
+                                                                    .category![
+                                                                        index1]
+                                                                    .acName,
+                                                            accountId:
+                                                                data[index]
+                                                                    .category![
+                                                                        index1]
+                                                                    .accountId,
+                                                            dateController:
+                                                                data[index]
+                                                                    .category![
+                                                                        index1]
+                                                                    .pDate,
+                                                            moneyAccount:
+                                                                data[index]
+                                                                    .category![
+                                                                        index1]
+                                                                    .pMoney!
+                                                                    .toString(),
+                                                            descriptionAccount:
+                                                                data[index]
+                                                                    .category![
+                                                                        index1]
+                                                                    .pExplanation,
+                                                          ),
+                                                      transition: Transition
+                                                          .rightToLeft);
+                                                });
                                               },
                                             )
                                           ],
@@ -339,7 +400,8 @@ class _HistoryViewState extends State<HistoryView> {
                                 return Container(
                                   margin: const EdgeInsets.only(top: 50),
                                   child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Image.asset(
                                           imgCoinBackGr,

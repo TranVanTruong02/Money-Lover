@@ -13,9 +13,12 @@ class PayPay extends StatefulWidget {
   final String? categoryIcon;
   final String? categoryTitle;
   final int? categoryDetailsId;
-  final String? accountIcon;
+  final int? accountIcon;
   final String? accountTitle;
   final int? accountId;
+  final String? dateController;
+  final String? moneyAccount;
+  final String? descriptionAccount;
 
   const PayPay(
       {super.key,
@@ -25,7 +28,10 @@ class PayPay extends StatefulWidget {
       this.categoryDetailsId,
       this.accountIcon,
       this.accountTitle,
-      this.accountId});
+      this.accountId,
+      this.dateController,
+      this.moneyAccount,
+      this.descriptionAccount});
 
   @override
   State<PayPay> createState() => _PayAccountState();
@@ -40,6 +46,34 @@ class _PayAccountState extends State<PayPay> {
     super.initState();
     if (widget.isCheck == null) {
       payVM.clean();
+    } else {
+      widget.categoryIcon != null
+          ? payVM.categoryIcon.value = widget.categoryIcon!
+          : payVM.categoryIcon.value = '';
+      widget.categoryTitle != null
+          ? payVM.categoryTitle.value = widget.categoryTitle!
+          : payVM.categoryTitle.value = '';
+      widget.categoryDetailsId != null
+          ? payVM.categoryDetailsId.value = widget.categoryDetailsId!
+          : payVM.categoryDetailsId.value = 0;
+      widget.accountIcon != null
+          ? payVM.accountIcon.value = widget.accountIcon!
+          : payVM.accountIcon.value = 0;
+      widget.accountTitle != null
+          ? payVM.accountTitle.value = widget.accountTitle!
+          : payVM.accountTitle.value = '';
+      widget.accountId != null
+          ? payVM.accountId.value = widget.accountId!
+          : payVM.accountId.value = 0;
+      widget.dateController != null
+          ? payVM.dateController.value.text = widget.dateController!
+          : payVM.dateController.value.text = '';
+      widget.moneyAccount != null
+          ? payVM.moneyAccount.value.text = widget.moneyAccount!
+          : payVM.moneyAccount.value.text = '';
+      widget.descriptionAccount != null
+          ? payVM.descriptionAccount.value.text = widget.descriptionAccount!
+          : payVM.descriptionAccount.value.text = '';
     }
   }
 
@@ -169,17 +203,23 @@ class _PayAccountState extends State<PayPay> {
                         },
                         child: Row(
                           children: [
-                            payVM.accountIcon.value == ''
+                            payVM.accountIcon.value == 0
                                 ? const Icon(
-                                    Icons.wallet,
+                                    Icons.account_balance_wallet,
                                     size: 25,
                                     color: Colors.black,
                                   )
-                                : Image.asset(
-                                    payVM.accountIcon.value,
-                                    width: 25,
-                                    height: 25,
-                                  ),
+                                : payVM.accountIcon.value == 1
+                                    ? const Icon(
+                                        Icons.account_balance_wallet,
+                                        size: 25,
+                                        color: Colors.black,
+                                      )
+                                    : const Icon(
+                                        Icons.account_balance,
+                                        size: 25,
+                                        color: Colors.black,
+                                      ),
                             const SizedBox(
                               width: 15,
                             ),
