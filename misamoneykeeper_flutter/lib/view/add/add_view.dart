@@ -1,15 +1,22 @@
 import 'package:misamoneykeeper_flutter/utility/export.dart';
-import 'package:misamoneykeeper_flutter/view/report/current_financial.dart';
+import 'package:misamoneykeeper_flutter/view/add/pay_collect.dart';
+import 'package:misamoneykeeper_flutter/view/add/pay_pay.dart';
+import 'package:misamoneykeeper_flutter/view/history/history_view.dart';
 
-class ReportDetails extends StatefulWidget {
-  const ReportDetails({super.key});
+class AddView extends StatefulWidget {
+  final bool? isCheck;
+  const AddView({super.key, this.isCheck});
 
   @override
-  State<ReportDetails> createState() => _ReportDetailsState();
+  AddViewState createState() => AddViewState();
 }
 
-class _ReportDetailsState extends State<ReportDetails> {
+class AddViewState extends State<AddView> {
+  bool showTextField = false;
+  final TextEditingController date = TextEditingController();
   int position = 0;
+  String pop = "Thêm chi tiết";
+  var title = 'Chi tiền'.obs;
 
   void changePosition(int index) {
     setState(() {
@@ -20,21 +27,33 @@ class _ReportDetailsState extends State<ReportDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 244, 242, 242),
         appBar: AppBar(
+          backgroundColor: Colors.blue,
+          actions: [
+            IconButton(
+                icon: const Icon(
+                  Icons.history,
+                  color: Colors.white,
+                  size: 25,
+                ),
+                onPressed: () {
+                  Get.to(() => const HistoryView(),
+                      transition: Transition.zoom);
+                }),
+          ],
+          elevation: 0,
           title: InkWell(
             onTap: () {
-              final left = context.screenWidth / 4.3;
-              final top = context.screenHeight * 0.12;
-              final right = left;
+              final left = context.screenWidth * 0.3;
+              final top = context.screenHeight * 0.11;
 
               showMenu(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
                 context: context,
-                position: RelativeRect.fromLTRB(left, top, right, 0.0),
+                position: RelativeRect.fromLTRB(left, top, left, 0.0),
                 items: List.generate(
-                  textLisReport.length,
+                  textListAdd.length,
                   (index) => PopupMenuItem(
                     value: index + 1,
                     child: Row(children: [
@@ -47,7 +66,7 @@ class _ReportDetailsState extends State<ReportDetails> {
                         width: 10,
                       ),
                       Text(
-                        textLisReport[index],
+                        textListAdd[index],
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.black.withOpacity(0.5),
@@ -74,27 +93,11 @@ class _ReportDetailsState extends State<ReportDetails> {
                 switch (value) {
                   case 1:
                     changePosition(0);
+                    title.value = "Chi tiền";
                     break;
                   case 2:
                     changePosition(1);
-                    break;
-                  case 3:
-                    changePosition(2);
-                    break;
-                  case 4:
-                    changePosition(3);
-                    break;
-                  case 5:
-                    changePosition(4);
-                    break;
-                  case 6:
-                    changePosition(5);
-                    break;
-                  case 7:
-                    changePosition(6);
-                    break;
-                  case 8:
-                    changePosition(7);
+                    title.value = "Thu tiền";
                     break;
                 }
               });
@@ -102,12 +105,13 @@ class _ReportDetailsState extends State<ReportDetails> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                textLisReport[0]
-                    .text
-                    .size(18)
-                    .fontFamily(sansBold)
-                    .white
-                    .make(),
+                Obx(
+                  () => title.value.text
+                      .size(18)
+                      .fontFamily(sansBold)
+                      .white
+                      .make(),
+                ),
                 const SizedBox(width: 5),
                 Image.asset(
                   icArrowDown,
@@ -131,17 +135,7 @@ class _ReportDetailsState extends State<ReportDetails> {
         ),
         body: IndexedStack(
           index: position,
-          children: [
-            const CurrentFinancial(),
-            Container(color: Colors.blue),
-            Container(color: Colors.cyan),
-            Container(color: Colors.lightGreenAccent),
-            Container(color: Colors.cyanAccent),
-            Container(color: Colors.black38),
-            Container(),
-            Container(),
-          ],
-        )
-        );
+          children: [PayPay(isCheck: widget.isCheck), PayCollect(isCheck: widget.isCheck,)],
+        ));
   }
 }

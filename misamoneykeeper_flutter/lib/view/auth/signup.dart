@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:misamoneykeeper_flutter/controller/sign_up_view_model.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
 
 class SignUpView extends StatefulWidget {
@@ -9,21 +9,17 @@ class SignUpView extends StatefulWidget {
 }
 
 class _SignUpViewState extends State<SignUpView> {
-  final _controller = TextEditingController();
-  bool _obscureText = false;
+  final authVM = Get.put(SignUpVM());
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-
-    _obscureText = !_obscureText;
   }
 
   @override
@@ -79,6 +75,7 @@ class _SignUpViewState extends State<SignUpView> {
                         Expanded(
                           flex: 3,
                           child: TextFormField(
+                            controller: authVM.txtTenDem.value,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Vui lòng nhập họ và tên đệm';
@@ -101,6 +98,7 @@ class _SignUpViewState extends State<SignUpView> {
                         Expanded(
                           flex: 2,
                           child: TextFormField(
+                            controller: authVM.txtTen.value,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Vui lòng nhập tên';
@@ -121,6 +119,7 @@ class _SignUpViewState extends State<SignUpView> {
                     ),
                     const SizedBox(height: 15),
                     TextFormField(
+                      controller: authVM.txtEmail.value,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Vui lòng nhập email';
@@ -138,6 +137,7 @@ class _SignUpViewState extends State<SignUpView> {
                     ),
                     const SizedBox(height: 15),
                     TextFormField(
+                      controller: authVM.txtSDT.value,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Vui lòng nhập số điện thoại';
@@ -155,7 +155,8 @@ class _SignUpViewState extends State<SignUpView> {
                     ),
                     const SizedBox(height: 15),
                     TextFormField(
-                      obscureText: !_obscureText,
+                      controller: authVM.txtPassword.value,
+                      obscureText: !authVM.isShowPasswordLogin.value,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Vui lòng nhập mật khẩu';
@@ -166,13 +167,9 @@ class _SignUpViewState extends State<SignUpView> {
                         hintText: 'Mật khẩu',
                         suffixIcon: IconButton(
                           onPressed: () {
-                            setState(
-                              () {
-                                _obscureText = !_obscureText;
-                              },
-                            );
+                            authVM.showPassword();
                           },
-                          icon: Icon(_obscureText
+                          icon: Icon(!authVM.isShowPasswordLogin.value
                               ? Icons.visibility_off
                               : Icons.visibility),
                           splashColor: Colors.transparent,

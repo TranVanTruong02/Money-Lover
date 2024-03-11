@@ -10,12 +10,7 @@ class ReportRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        title
-            .text
-            .size(16)
-            .color(Colors.black)
-            .fontFamily(sansRegular)
-            .make(),
+        title.text.size(16).color(Colors.black).fontFamily(sansBold).make(),
         formatCurrency(money)
             .text
             .size(16)

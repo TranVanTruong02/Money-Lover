@@ -1,6 +1,6 @@
 {
-    "name": "misamoneykeeper_flutter",
-    "short_name": "misamoneykeeper_flutter",
+    "name": "app_expensebook",
+    "short_name": "app_expensebook",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

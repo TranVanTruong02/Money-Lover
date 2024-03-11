@@ -85,6 +85,16 @@ class SVKey {
   static const svLogout = '${baseUrl}logout';
   static const svRefresh = '${baseUrl}refreshaccesstoken';
   static const svReportAccount = '${baseUrl}account';
+  static const svHomeStatus = '${baseUrl}history/home';
+  static const svRecnetNoteHome = '${baseUrl}recnetnote/home';
+  static const svRecnetNote = '${baseUrl}recnetnote';
+  static const svCategory = '${baseUrl}category';
+  static const svCategoryCollect = '${baseUrl}category/collect';
+  static const svAddAccount = '${baseUrl}account/add';
+  static const svUpdateAccount = '${baseUrl}account/update';
+  static const svDeleteAccount = '${baseUrl}account/delete';
+  static const svAddPlay = '${baseUrl}addpay';
+  static const svStatus = '${baseUrl}history';
 }
 
 class KKey {

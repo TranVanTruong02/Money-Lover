@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:misamoneykeeper_flutter/view/start/splash_view.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
 import 'package:misamoneykeeper_flutter/server/my_http_overrides.dart';
+import 'package:misamoneykeeper_flutter/view/start/splash_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences? prefs;

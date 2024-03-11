@@ -201,6 +201,16 @@ class PayAddView(APIView):
                     serializer = PayAddSerializer(data=request.data)
                     if serializer.is_valid():
                         pay = serializer.save()
+                        # Cập nhập lại số tiền trong tài khoản
+                        account = Account.objects.get(account_id=account_id)
+                        if data.get('p_type') == 1:
+                            money = account.ac_money - data.get('p_money')
+                            account.ac_money = money
+                            account.save()
+                        else:
+                            money = account.ac_money + data.get('p_money')
+                            account.ac_money = money
+                            account.save()
                         data = {
                             'status': 1,
                             'payload': PayViewSerializer(pay).data,
@@ -291,7 +301,59 @@ class CategoryCollectView(APIView):
                 'message': "Bạn đã lấy ra dữ liệu loại hạng mục thu thành công"
             }
             return JsonResponse(data)
-    
+
+# API Lịch sử ghi chép trang Home
+class HistoryHomeView(APIView):
+    def post(self, request):
+        data = request.data
+        user_id = data.get('user_id')
+        if not User.objects.filter(id=user_id).exists():
+            return Response({
+                'error_message': 'Người dùng không tồn tại',
+                'error_code': 400,
+            }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            category = Pay.objects.filter(user_id=user_id
+            ).prefetch_related( # Liên kết 3 bảng, sử dụng __ để định quan hệ
+                'category_details_id__category_id'
+            ).values(
+                'category_details_id__category_id',
+                'category_details_id__category_id__ca_name',
+                'category_details_id__category_id__ca_image'
+            ).annotate(
+                sum_money=Sum('p_money')
+            )
+            data = []
+            for p in category:
+                data.append({
+                    'category_id': p['category_details_id__category_id'],
+                    'ca_name': p['category_details_id__category_id__ca_name'],
+                    'ca_image': "/api/media/" + p['category_details_id__category_id__ca_image'],
+                    'sum_money': p['sum_money']
+            })
+            # Tổng tiền  
+            pay = Pay.objects.filter(user_id=user_id).values('user_id').annotate(
+                sum_money_pay=Sum('p_money', filter=Q(p_type=1)),
+                sum_money_collect=Sum('p_money', filter=Q(p_type=2))
+            )
+            data1 = []
+            for p in pay:
+                data1.append({
+                    'p_money_pay': p['sum_money_pay'] if p['sum_money_pay'] is not None else 0, 
+                    'p_money_collect': p['sum_money_collect'] if p['sum_money_collect'] is not None else 0
+                })
+            data2 = []
+            data2.append({
+                'sum': data1,
+                'category': data
+            })
+            data3 = {
+                'status': 1,
+                'payload': list(data2),
+                'message': "Bạn đã lấy ra dữ liệu lịch sử ghi chép thành công"
+            }
+            return JsonResponse(data3)
+            
 # API Lịch sử ghi chép
 class HistoryView(APIView):
     def post(self, request):
@@ -325,7 +387,7 @@ class HistoryView(APIView):
                     data1.append({
                         'category_id': p['category_details_id__category_id'],
                         'ca_name': p['category_details_id__category_id__ca_name'],
-                        'ca_image': p['category_details_id__category_id__ca_image'],
+                        'ca_image': "/api/media/" + p['category_details_id__category_id__ca_image'],
                         'sum_money': p['sum_money']
                     })
                 # Thứ 2
@@ -346,7 +408,7 @@ class HistoryView(APIView):
                         'category_details_id': p['category_details_id'],
                         'category_id': p['category_details_id__category_id'],
                         'cad_name': p['category_details_id__cad_name'],
-                        'cad_image': p['category_details_id__cad_image'],
+                        'cad_image': "/api/media/" + p['category_details_id__cad_image'],
                         'sum_money': p['sum_money']
                     })
                 # Thứ 3

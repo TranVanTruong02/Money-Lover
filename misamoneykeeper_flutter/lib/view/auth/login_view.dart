@@ -99,6 +99,7 @@ class _LoginViewState extends State<LoginView> {
                           suffixIcon: IconButton(
                             onPressed: () {
                               authVM.showPassword();
+                              setState(() {});
                             },
                             icon: Icon(!authVM.isShowPasswordLogin.value
                                 ? Icons.visibility_off
@@ -121,7 +122,9 @@ class _LoginViewState extends State<LoginView> {
                             flex: 1,
                             child: ElevatedButton(
                               onPressed: () {
-                                authVM.serviceCallLogin();
+                                if (_formKey.currentState!.validate()) {
+                                  authVM.serviceCallLogin();
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 splashFactory: NoSplash.splashFactory,
@@ -139,15 +142,15 @@ class _LoginViewState extends State<LoginView> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      // const SizedBox(height: 10),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
-                            'Quên mật khẩu'.toUpperCase(),
-                            style: const TextStyle(
-                                color: Colors.blue, fontSize: 13),
-                          ),
+                          // Text(
+                          //   'Quên mật khẩu'.toUpperCase(),
+                          //   style: const TextStyle(
+                          //       color: Colors.blue, fontSize: 13),
+                          // ),
                           TextButton(
                               onPressed: () {
                                 Get.to(() => const SignUpView());

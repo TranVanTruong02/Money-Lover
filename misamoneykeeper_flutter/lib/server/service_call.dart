@@ -48,77 +48,80 @@ class ServiceCall {
   }
 }
 
-// class ServiceCall {
-//   static Future<void> post(Map<String, dynamic> parameter, String path,
-//       {bool isToken = false,
-//       bool login = false,
-//       ResSuccess? withSuccess,
-//       ResFailure? failure}) async {
-//     try {
-//       // Nếu nhưa chưa vượt thời hạn mã token
-//       if (login == false) {
-//         // Nếu như thời gian hiện tại vượt qua hạn token
-//         if (DateTime.now().toUtc().isAfter(
-//             DateTime.parse(splashVM.userModel.value.accessTokenExpiration!)
-//                 .toUtc())) {
-//           // Nếu token đã hết hạn
-//           await http.post(
-//             Uri.parse(SVKey.mainUrl + SVKey.baseUrl + SVKey.svRefresh),
-//             body: {
-//               "refresh_token": splashVM.userModel.value.refreshToken,
-//             },
-//           ).then((value) {
-//             if (kDebugMode) {
-//               // Nếu lỗi
-//               print(value.body);
-//             }
-//             var resObj = json.decode(value.body) as Map<String, dynamic>? ?? {};
-//             if (resObj[KKey.status] == 1) {
-//               splashVM.userModel.value = UserModel();
-//               var payload = resObj[KKey.payload] as Map? ?? {};
+class ServiceCallPatch {
+  static Future<void> patch(Map<String, dynamic> parameter, String path,
+      {bool isToken = false,
+      ResSuccess? withSuccess,
+      ResFailure? failure}) async {
+    try {
+      // Đặt tiêu đề mặc định với Content-Type
+      var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
 
-//               Globs.udSet(payload, Globs.userPayload);
+      if (isToken) {
+        var token = Get.find<SplashViewModel>().userModel.value.accessToken;
+        headers["Authorization"] = token != null ? "Bearer $token" : "";
+      }
+      // Sử dụng gói http để gửi yêu cầu POST với các tham số và tiêu đề được cung cấp
+      await http
+          .patch(Uri.parse(path), body: parameter, headers: headers)
+          .then((value) {
+        if (kDebugMode) {
+          // Nếu lỗi
+          print(value.body);
+        }
+        try {
+          // Giải mã
+          var jsonObj = json.decode(value.body) as Map<String, dynamic>? ?? {};
 
-//               // Thực hiện tiếp
-//               service(parameter, path, isToken, withSuccess, failure);
-//             }
-//           });
-//         } else {
-//           service(parameter, path, isToken, withSuccess, failure);
-//         }
-//       } else {
-//         service(parameter, path, isToken, withSuccess, failure);
-//       }
-//     } catch (err) {
-//       if (failure != null) failure(err.toString());
-//     }
-//   }
-// }
-// Future<void> service(Map<String, dynamic> parameter, String path, bool isToken,
-//     ResSuccess? withSuccess, ResFailure? failure) async {
-//   // Đặt tiêu đề mặc định với Content-Type
-//   var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
+          if (withSuccess != null) withSuccess(jsonObj);
+        } catch (err) {
+          if (failure != null) failure(err.toString());
+        }
+        // Nếu yêu cầu post thất bại
+      }).catchError((e) {
+        if (failure != null) failure(e.toString());
+      });
+    } catch (err) {
+      if (failure != null) failure(err.toString());
+    }
+  }
+}
 
-//   if (isToken) {
-//     var token = Get.find<SplashViewModel>().userModel.value.accessToken;
-//     headers["Authorization"] = token != null ? "Bearer $token" : "";
-//   }
-//   // Sử dụng gói http để gửi yêu cầu POST với các tham số và tiêu đề được cung cấp
-//   await http.post(Uri.parse(path), body: parameter, headers: headers).then((value) {
-//     if (kDebugMode) {
-//       // Nếu lỗi
-//       print(value.body);
-//     }
-//     try {
-//       // Giải mã
-//       var jsonObj = json.decode(value.body) as Map<String, dynamic>? ?? {};
+class ServiceCallDelete {
+  static Future<void> delete(Map<String, dynamic> parameter, String path,
+      {bool isToken = false,
+      ResSuccess? withSuccess,
+      ResFailure? failure}) async {
+    try {
+      // Đặt tiêu đề mặc định với Content-Type
+      var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
 
-//       if (withSuccess != null) withSuccess(jsonObj);
-//     } catch (err) {
-//       if (failure != null) failure(err.toString());
-//     }
-//     // Nếu yêu cầu post thất bại
-//   }).catchError((e) {
-//     if (failure != null) failure(e.toString());
-//   });
-// }
+      if (isToken) {
+        var token = Get.find<SplashViewModel>().userModel.value.accessToken;
+        headers["Authorization"] = token != null ? "Bearer $token" : "";
+      }
+      // Sử dụng gói http để gửi yêu cầu POST với các tham số và tiêu đề được cung cấp
+      await http
+          .delete(Uri.parse(path), body: parameter, headers: headers)
+          .then((value) {
+        if (kDebugMode) {
+          // Nếu lỗi
+          print(value.body);
+        }
+        try {
+          // Giải mã
+          var jsonObj = json.decode(value.body) as Map<String, dynamic>? ?? {};
+
+          if (withSuccess != null) withSuccess(jsonObj);
+        } catch (err) {
+          if (failure != null) failure(err.toString());
+        }
+        // Nếu yêu cầu post thất bại
+      }).catchError((e) {
+        if (failure != null) failure(e.toString());
+      });
+    } catch (err) {
+      if (failure != null) failure(err.toString());
+    }
+  }
+}

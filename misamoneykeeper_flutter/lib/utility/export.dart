@@ -7,3 +7,4 @@ export './vnd.dart';
 export 'package:flutter/material.dart';
 export 'package:velocity_x/velocity_x.dart';
 export 'package:get/get.dart';
+export 'package:auto_size_text/auto_size_text.dart';

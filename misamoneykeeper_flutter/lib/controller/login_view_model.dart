@@ -1,7 +1,7 @@
 import 'package:misamoneykeeper_flutter/controller/splash_view_model.dart';
-import 'package:misamoneykeeper_flutter/utility/export.dart';
-import 'package:misamoneykeeper_flutter/server/service_call.dart';
 import 'package:misamoneykeeper_flutter/server/globs.dart';
+import 'package:misamoneykeeper_flutter/server/service_call.dart';
+import 'package:misamoneykeeper_flutter/utility/export.dart';
 
 class LoginViewModel extends GetxController {
   final txtEmail = TextEditingController().obs;
@@ -13,8 +13,8 @@ class LoginViewModel extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    txtEmail.value.text = "anhthu2003@gmail.com";
-    txtPassword.value.text = "anhthu2003";
+    txtEmail.value.text = "tuminhhieu111@gmail.com";
+    txtPassword.value.text = "123456";
   }
 
   void serviceCallLogin() {
@@ -35,6 +35,8 @@ class LoginViewModel extends GetxController {
         Get.find<SplashViewModel>().goAfterLoginMainTab();
 
         Get.snackbar("MiSa", "Bạn đã đăng nhập thành công");
+      } else {
+        Get.snackbar("MiSa", "Sai mật khẩu hoặc tài khoản");
       }
     }, failure: (err) async {
       Get.snackbar("MiSA", err.toString());
