@@ -2,7 +2,7 @@ import 'package:misamoneykeeper_flutter/model/user_model.dart';
 import 'package:misamoneykeeper_flutter/server/globs.dart';
 import 'package:misamoneykeeper_flutter/view/home/home_main.dart';
 import 'package:get/get.dart';
-import 'package:misamoneykeeper_flutter/view/screens/introduction_page.dart';
+import 'package:misamoneykeeper_flutter/view/start/introduction_page.dart';
 
 class SplashViewModel extends GetxController {
   final userModel = UserModel().obs;

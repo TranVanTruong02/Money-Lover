@@ -1,5 +1,5 @@
 import 'package:misamoneykeeper_flutter/controller/pay_account_view_model.dart';
-import 'package:misamoneykeeper_flutter/controller/pay_collect_view_model.dart';
+import 'package:misamoneykeeper_flutter/controller/collect_view_model.dart';
 import 'package:misamoneykeeper_flutter/controller/pay_view_model.dart';
 import 'package:misamoneykeeper_flutter/server/loading_indicator.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
@@ -12,7 +12,7 @@ class PayAccountDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     var payAccount = Get.put(PayAccountViewModel());
     final payVM = Get.find<PayViewModel>();
-    final payVM1 = Get.find<PayCollectViewModel>();
+    final payVM1 = Get.find<CollectViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: "Chọn tài khoản".text.size(18).white.fontFamily(sansBold).make(),

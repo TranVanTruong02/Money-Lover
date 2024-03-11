@@ -161,6 +161,11 @@ class _StatusCollectState extends State<StatusCollect> {
                                         Get.to(
                                             () => AddView(
                                                   isCheck: true,
+                                                  payId: data[0]
+                                                          .categoryDetails![
+                                                              index]
+                                                          .pay![index1]
+                                                        .payId,
                                                   categoryIcon: SVKey.mainUrl +
                                                       data[0]
                                                           .categoryDetails![

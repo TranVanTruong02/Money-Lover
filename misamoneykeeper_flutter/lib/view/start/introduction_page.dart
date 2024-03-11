@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:misamoneykeeper_flutter/view/auth/login_view.dart';
-import 'package:misamoneykeeper_flutter/view/screens/signup_page.dart';
+import 'package:misamoneykeeper_flutter/view/auth/signup.dart';
 
 class IntroductionPage extends StatefulWidget {
   const IntroductionPage({super.key});
@@ -104,7 +104,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Get.to(() => const SignUpPage());
+                          Get.to(() => const SignUpView());
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:

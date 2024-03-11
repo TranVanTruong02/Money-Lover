@@ -81,7 +81,7 @@ class SVKey {
   static const nodeUrl = mainUrl;
 
   static const svLogin = '${baseUrl}login';
-  static const svSignUp = '${baseUrl}signup';
+  static const svSignUp = '${baseUrl}register';
   static const svLogout = '${baseUrl}logout';
   static const svRefresh = '${baseUrl}refreshaccesstoken';
   static const svReportAccount = '${baseUrl}account';
@@ -93,7 +93,9 @@ class SVKey {
   static const svAddAccount = '${baseUrl}account/add';
   static const svUpdateAccount = '${baseUrl}account/update';
   static const svDeleteAccount = '${baseUrl}account/delete';
-  static const svAddPlay = '${baseUrl}addpay';
+  static const svAddPlay = '${baseUrl}add/pay';
+  static const svUpdatePlay = '${baseUrl}update/pay';
+  static const svDeletePlay = '${baseUrl}delete/pay';
   static const svStatus = '${baseUrl}history';
 }
 

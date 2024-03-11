@@ -88,7 +88,7 @@ class _HomeAccountState extends State<HomeAccount> {
                           onPressed: () {
                             Get.to(
                                 () => AddView(
-                                      isCheck: true,
+                                      isCheck: false,
                                       accountIcon: data[index].acType,
                                       accountTitle: data[index].acName,
                                       accountId: data[index].accountId,

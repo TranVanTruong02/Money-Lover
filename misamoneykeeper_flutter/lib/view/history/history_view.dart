@@ -332,6 +332,10 @@ class _HistoryViewState extends State<HistoryView> {
                                                   Get.to(
                                                       () => AddView(
                                                             isCheck: true,
+                                                            payId: data[index]
+                                                                .category![
+                                                                    index1]
+                                                                .payId,
                                                             categoryIcon: SVKey
                                                                     .mainUrl +
                                                                 data[index]

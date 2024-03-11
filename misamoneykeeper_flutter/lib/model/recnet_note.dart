@@ -39,6 +39,7 @@ class RecnetNote {
 }
 
 class Category {
+  int? payId;
   int? categoryDetailsId;
   String? categoryName;
   String? cadImage;
@@ -51,7 +52,8 @@ class Category {
   int? acType;
 
   Category(
-      {categoryDetailsId,
+      {payId,
+      categoryDetailsId,
       categoryName,
       cadImage,
       pType,
@@ -63,6 +65,7 @@ class Category {
       acType});
 
   Category.fromJson(Map<String, dynamic> json) {
+    payId = json['pay_id'];
     categoryDetailsId = json['category_details_id'];
     categoryName = json['category_name'];
     cadImage = json['cad_image'];
@@ -77,6 +80,7 @@ class Category {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
+    data['pay_id'] = payId;
     data['category_details_id'] = categoryDetailsId;
     data['category_name'] = categoryName;
     data['cad_image'] = cadImage;

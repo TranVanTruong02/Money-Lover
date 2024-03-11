@@ -14,7 +14,7 @@ class AccountViewModel extends GetxController {
   final splashVM = Get.find<SplashViewModel>();
   // //ServiceCall
   StreamController<List<AccountModel>> streamController =
-      StreamController<List<AccountModel>>();
+      StreamController<List<AccountModel>>.broadcast();
   void serviceCallList() async {
     await ServiceCall.post({
       "user_id": splashVM.userModel.value.id.toString(),

@@ -13,16 +13,6 @@ class _SignUpViewState extends State<SignUpView> {
   final _formKey = GlobalKey<FormState>();
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -154,31 +144,33 @@ class _SignUpViewState extends State<SignUpView> {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    TextFormField(
-                      controller: authVM.txtPassword.value,
-                      obscureText: !authVM.isShowPasswordLogin.value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Vui lòng nhập mật khẩu';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Mật khẩu',
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            authVM.showPassword();
-                          },
-                          icon: Icon(!authVM.isShowPasswordLogin.value
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                        ),
-                        contentPadding: const EdgeInsets.all(10),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                          borderSide: const BorderSide(),
+                    Obx(
+                      () => TextFormField(
+                        controller: authVM.txtPassword.value,
+                        obscureText: !authVM.isShowPasswordLogin.value,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Vui lòng nhập mật khẩu';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Mật khẩu',
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              authVM.showPassword();
+                            },
+                            icon: Icon(!authVM.isShowPasswordLogin.value
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                          ),
+                          contentPadding: const EdgeInsets.all(10),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6),
+                            borderSide: const BorderSide(),
+                          ),
                         ),
                       ),
                     ),
@@ -213,13 +205,7 @@ class _SignUpViewState extends State<SignUpView> {
                           flex: 1,
                           child: ElevatedButton(
                             onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                // ScaffoldMessenger.of(context).showSnackBar(
-                                //   const SnackBar(
-                                //     content: Text('ddd'),
-                                //   ),
-                                // );
-                              }
+                              authVM.serviceCallSignUp();
                             },
                             style: ElevatedButton.styleFrom(
                               splashFactory: NoSplash.splashFactory,

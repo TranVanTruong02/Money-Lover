@@ -219,6 +219,11 @@ class _StatusPayState extends State<StatusPay> {
                                               Get.to(
                                                   () => AddView(
                                                         isCheck: true,
+                                                        payId: data[index]
+                                                                .categoryDetails![
+                                                                    index1]
+                                                                .pay![index2]
+                                                        .payId,
                                                         categoryIcon: SVKey
                                                                 .mainUrl +
                                                             data[index]

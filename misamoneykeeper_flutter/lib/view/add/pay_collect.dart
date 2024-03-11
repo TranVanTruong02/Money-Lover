@@ -1,6 +1,6 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/services.dart';
-import 'package:misamoneykeeper_flutter/controller/pay_collect_view_model.dart';
+import 'package:misamoneykeeper_flutter/controller/collect_view_model.dart';
 import 'package:misamoneykeeper_flutter/server/loading_indicator.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
 import 'package:misamoneykeeper_flutter/view/add/category_collect.dart';
@@ -10,6 +10,7 @@ import 'package:misamoneykeeper_flutter/view/add/pay_account_details.dart';
 
 class PayCollect extends StatefulWidget {
   final bool? isCheck;
+  final int? payId;
   final String? categoryIcon;
   final String? categoryTitle;
   final int? categoryDetailsId;
@@ -23,6 +24,7 @@ class PayCollect extends StatefulWidget {
   const PayCollect(
       {super.key,
       this.isCheck,
+      this.payId,
       this.categoryIcon,
       this.categoryTitle,
       this.categoryDetailsId,
@@ -39,7 +41,7 @@ class PayCollect extends StatefulWidget {
 
 class _PayAccountState extends State<PayCollect> {
   FocusNode dateFocusNode = FocusNode();
-  final payVM = Get.put(PayCollectViewModel());
+  final payVM = Get.put(CollectViewModel());
 
   @override
   void initState() {
@@ -47,6 +49,9 @@ class _PayAccountState extends State<PayCollect> {
     if (widget.isCheck == null) {
       payVM.clean();
     } else {
+      widget.payId != null
+          ? payVM.payId.value = widget.payId!
+          : payVM.payId.value = 0;
       widget.categoryIcon != null
           ? payVM.categoryIcon.value = widget.categoryIcon!
           : payVM.categoryIcon.value = '';
@@ -249,14 +254,62 @@ class _PayAccountState extends State<PayCollect> {
                     const SizedBox(
                       height: 30,
                     ),
-                    SizedBox(
-                        width: 400,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            payVM.serviceAddPay();
-                          },
-                          child: const Text('LƯU'),
-                        )),
+                    widget.isCheck == true
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                        width: context.screenWidth * 0.4,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            payVM.serviceAddPay();
+                                          },
+                                          child: const Text('LƯU'),
+                                        )),
+                                    SizedBox(
+                                        width: context.screenWidth * 0.4,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            payVM.serviceUpdatePay(
+                                                payVM.payId.value,
+                                                widget.moneyAccount!);
+                                          },
+                                          child: const Text('Sửa'),
+                                        )),
+                                  ],
+                                ),
+                                5.heightBox,
+                                SizedBox(
+                                    width: context.screenWidth * 0.4,
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.red),
+                                      ),
+                                      onPressed: () {
+                                        payVM.serviceDeletePay(
+                                            payVM.payId.value);
+                                      },
+                                      child: const Text('Xóa'),
+                                    )),
+                              ],
+                            ),
+                          )
+                        : SizedBox(
+                            width: context.screenWidth * 0.8,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                payVM.serviceAddPay();
+                              },
+                              child: const Text('Lưu'),
+                            )),
                   ],
                 )),
               ),

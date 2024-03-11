@@ -71,11 +71,11 @@ class UserRegisterView(APIView):
                 }, status=status.HTTP_400_BAD_REQUEST)
         else:
             # Dự Liệu Mặc Định
-            data['type'] = 1 
-            data['is_superuser'] = False
-            data['is_staff'] = False
-            data['groups'] = [] 
-            data['user_permissions'] = [] 
+            # data['type'] = 1 
+            # data['is_superuser'] = False
+            # data['is_staff'] = False
+            # data['groups'] = [] 
+            # data['user_permissions'] = [] 
         
             serializer = UserSerializer(data=data)
 
@@ -225,55 +225,90 @@ class PayAddView(APIView):
 
 # API màn hình sửa Thu/Chi
 class PayUpdateView(APIView):
-    def post(self, request):
-
+    def patch(self, request):
         data=request.data
-
+        pay_id = data.get('pay_id')
         user_id = data.get('user_id')
         category_details_id = data.get('category_details_id')
         account_id = data.get('account_id')
-        if not User.objects.filter(id=user_id).exists():
+        money_old = data.get('money_old')
+        if not Pay.objects.filter(pay_id=pay_id, user_id=user_id, category_details_id=category_details_id, account_id=account_id).exists():
+                return Response({
+                    'error_message': 'Khoản chi/thu không tồn tại',
+                    'error_code': 400,
+                }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            if not User.objects.filter(id=user_id).exists():
                 return Response({
                     'error_message': 'Người dùng không tồn tại',
                     'error_code': 400,
                 }, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            if not CategoryDetails.objects.filter(category_details_id=category_details_id).exists(): 
-                return Response({
-                    'error_message': 'Hạng mục không tồn tại',
-                    'error_code': 400,
-                }, status=status.HTTP_400_BAD_REQUEST)
             else:
-                if not Account.objects.filter(account_id=account_id).exists():
+                if not CategoryDetails.objects.filter(category_details_id=category_details_id).exists(): 
                     return Response({
-                        'error_message': 'Ví không tồn tại',
+                        'error_message': 'Hạng mục không tồn tại',
                         'error_code': 400,
                     }, status=status.HTTP_400_BAD_REQUEST)
                 else:
-                    serializer = PayAddSerializer(data=request.data)
-                    if serializer.is_valid():
-                        pay = serializer.save()
-                        # Cập nhập lại số tiền trong tài khoản
-                        account = Account.objects.get(account_id=account_id)
-                        if data.get('p_type') == 1:
-                            money = account.ac_money - int(data.get('p_money'))
-                            account.ac_money = money
-                            account.save()
-                        else:
-                            money = account.ac_money + int(data.get('p_money'))
-                            account.ac_money = money
-                            account.save()
-                        data = {
-                            'status': 1,
-                            'payload': PayViewSerializer(pay).data,
-                            'message': "Bạn đã thêm khoản thu/chi thành công!"
-                        }
-                        return JsonResponse(data, status=status.HTTP_200_OK)
-                    return Response({
-                        'error_messages': serializer.errors,
-                        'error_code': 400
-                    }, status=status.HTTP_400_BAD_REQUEST)
-                
+                    if not Account.objects.filter(account_id=account_id).exists():
+                        return Response({
+                            'error_message': 'Ví không tồn tại',
+                            'error_code': 400,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        # Đã kiểm tra xong
+                        pay = Pay.objects.get(pay_id=pay_id, user_id=user_id, category_details_id=category_details_id, account_id=account_id)
+                        serializer = PayAddSerializer(data=request.data)
+                        if serializer.is_valid():
+                            pay.p_type = data.get('p_type')
+                            pay.p_money = data.get('p_money')
+                            pay.p_explanation = data.get('p_explanation')
+                            pay.p_date = data.get('p_date')
+                            pay.save()
+
+                            # Cập nhập lại số tiền trong tài khoản
+                            account = Account.objects.get(account_id=account_id)
+                            if data.get('p_type') == 1:
+                                money = account.ac_money + int(money_old) - int(data.get('p_money'))
+                                account.ac_money = money
+                                account.save()
+                            else:
+                                money = account.ac_money - int(money_old) + int(data.get('p_money'))
+                                account.ac_money = money
+                                account.save()
+                            data = {
+                                'status': 1,
+                                'payload': PayViewSerializer(pay).data,
+                                'message': "Bạn cập nhật khoản thu/chi thành công!"
+                            }
+                            return JsonResponse(data, status=status.HTTP_200_OK)
+                        return Response({
+                            'error_messages': serializer.errors,
+                            'error_code': 400
+                        }, status=status.HTTP_400_BAD_REQUEST)
+
+# API màn hình xóa Thu/Chi
+class PayDeleteView(APIView):
+    def delete(self, request):
+        data = request.data
+        pay_id = data.get('pay_id')
+        user_id = data.get('user_id')
+        category_details_id = data.get('category_details_id')
+        account_id = data.get('account_id')
+        if not Pay.objects.filter(pay_id=pay_id, user_id=user_id, category_details_id=category_details_id, account_id=account_id).exists():
+                return Response({
+                    'error_message': 'Khoản chi/thu không tồn tại',
+                    'error_code': 400,
+                }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            pay = Pay.objects.get(pay_id=pay_id, user_id=user_id, category_details_id=category_details_id, account_id=account_id)
+            pay.delete()
+            data = {
+                'status': 1,
+                'message': "Bạn đã xóa tài khoản thu/chi thành công"
+            }
+            return JsonResponse(data, status=status.HTTP_200_OK)
+            
 # API điều chỉnh số dư
 class BalanceAdjustmentView(APIView):
     def patch(self, request):
@@ -471,6 +506,7 @@ class HistoryView(APIView):
                 data3 = []
                 for c in pay:
                     data3.append({
+                        'pay_id': c.pay_id,
                         'category_details_id': c.category_details_id.category_details_id,
                         'category_name': c.category_details_id.cad_name,
                         'cad_image': c.category_details_id.cad_image.url, 
@@ -514,6 +550,7 @@ class RecentNotesHomeView(APIView):
             data = []
             for c in category:
                 data.append({
+                    'pay_id': c.pay_id,
                     'category_details_id': c.category_details_id.category_details_id,
                     'category_name': c.category_details_id.cad_name,
                     'cad_image': c.category_details_id.cad_image.url, 
@@ -568,6 +605,7 @@ class RecentNotesView(APIView):
             data2 = []
             for c in category:
                 data2.append({
+                    'pay_id': c.pay_id,
                     'category_details_id': c.category_details_id.category_details_id,
                     'category_name': c.category_details_id.cad_name,
                     'cad_image': c.category_details_id.cad_image.url, 
@@ -810,13 +848,14 @@ class UserProfileView(APIView):
                 user = UserDetails.objects.filter(user_id=user_id).prefetch_related('user_id')
                 data = []
                 for c in user:
+                    u_image_url = c.u_image.url if c.u_image else ''
                     data.append({
                         'user_id': c.user_id.id,
                         'user_details_id': c.user_details_id,
                         'email': c.user_id.email,
                         'mobile': c.user_id.mobile,
                         'u_name': c.u_name,
-                        'u_image': c.u_image.url,
+                        'u_image': u_image_url,
                         'u_gender': c.u_gender,
                         'u_birthday': c.u_birthday,
                         'u_address': c.u_address,

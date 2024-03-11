@@ -499,6 +499,8 @@ class _HomeViewState extends State<HomeView> {
                                           Get.to(
                                               () => AddView(
                                                     isCheck: true,
+                                                    payId: recnetNoteHome[index]
+                                                        .payId,
                                                     categoryIcon: SVKey
                                                             .mainUrl +
                                                         recnetNoteHome[index]

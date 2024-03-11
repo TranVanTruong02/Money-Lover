@@ -2,6 +2,7 @@ import 'package:misamoneykeeper_flutter/controller/splash_view_model.dart';
 import 'package:misamoneykeeper_flutter/server/globs.dart';
 import 'package:misamoneykeeper_flutter/server/service_call.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
+import 'package:misamoneykeeper_flutter/view/auth/login_view.dart';
 
 class SignUpVM extends GetxController {
   final txtEmail = TextEditingController().obs;
@@ -9,35 +10,40 @@ class SignUpVM extends GetxController {
   final txtTenDem = TextEditingController().obs;
   final txtTen = TextEditingController().obs;
   final txtSDT = TextEditingController().obs;
-  final isShowPasswordLogin = false.obs;
 
+  final isShowPasswordLogin = false.obs;
   final isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    txtEmail.value.text = "tuminhhieu111@gmail.com";
-    txtPassword.value.text = "123456";
+    txtTenDem.value.text = "Thanh";
+    txtTen.value.text = "Thiện";
+    txtEmail.value.text = "thanhthien2000@gmail.com";
+    txtSDT.value.text = "0956735363";
+    txtPassword.value.text = "thanhthien2000";
   }
 
-  void serviceCallLogin() {
+  void serviceCallSignUp() async {
     isLoading(true);
-    // Gửi yêu cầu post vs các tham số, đường dẫn, thành công, thất bại
-    ServiceCall.post({
+    print(txtTenDem.value.text);
+    print(txtPassword.value.text);
+    await ServiceCall.post({
+      "first_name": txtTenDem.value.text,
+      "last_name": txtTen.value.text,
       "email": txtEmail.value.text,
+      "mobile": txtSDT.value.text,
       "password": txtPassword.value.text,
-    }, SVKey.svLogin, withSuccess: (resObj) async {
+      "type": "1",
+      "is_superuser": "False",
+      "is_staff": "False",
+      "is_active": "1"
+    }, SVKey.svSignUp, withSuccess: (resObj) async {
       isLoading(false);
       if (resObj[KKey.status] == 1) {
         var payload = resObj[KKey.payload] as Map? ?? {};
-
-        Globs.udSet(payload, Globs.userPayload);
-        Globs.udBoolSet(true, Globs.userLogin);
-
-        Get.delete<SignUpVM>();
-        Get.find<SplashViewModel>().goAfterLoginMainTab();
-
-        Get.snackbar("MiSa", "Bạn đã đăng nhập thành công");
+        Get.to(() => const LoginView(), transition: Transition.leftToRight);
+        Get.snackbar("MiSa", "Bạn đã đăng kí thành công");
       }
     }, failure: (err) async {
       Get.snackbar("MiSA", err.toString());

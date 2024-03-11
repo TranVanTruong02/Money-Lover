@@ -1,6 +1,7 @@
 import 'package:misamoneykeeper_flutter/common/exit_dialog.dart';
 import 'package:misamoneykeeper_flutter/common/report_row.dart';
 import 'package:misamoneykeeper_flutter/controller/account_view_model.dart';
+import 'package:misamoneykeeper_flutter/controller/splash_view_model.dart';
 import 'package:misamoneykeeper_flutter/model/account_model.dart';
 import 'package:misamoneykeeper_flutter/server/loading_indicator.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
@@ -16,6 +17,7 @@ class AccountView extends StatefulWidget {
 
 class _AccountViewState extends State<AccountView> {
   late AccountViewModel accountViewModel;
+  final splashVM = Get.find<SplashViewModel>();
   @override
   void initState() {
     super.initState();
@@ -55,7 +57,9 @@ class _AccountViewState extends State<AccountView> {
               Icons.search,
               color: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () {
+              splashVM.logout();
+            },
           ),
         ],
       ),

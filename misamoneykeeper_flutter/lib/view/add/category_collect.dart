@@ -1,5 +1,5 @@
 import 'package:misamoneykeeper_flutter/controller/category_details_collect_view_model.dart';
-import 'package:misamoneykeeper_flutter/controller/pay_collect_view_model.dart';
+import 'package:misamoneykeeper_flutter/controller/collect_view_model.dart';
 import 'package:misamoneykeeper_flutter/server/globs.dart';
 import 'package:misamoneykeeper_flutter/server/loading_indicator.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
@@ -10,7 +10,7 @@ class CategoryCollect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var categoryDetails = Get.put(CategoryDetailsCollectViewModel());
-    final payCollect = Get.find<PayCollectViewModel>();
+    final payCollect = Get.find<CollectViewModel>();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blueAccent,

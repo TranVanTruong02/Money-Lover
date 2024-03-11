@@ -5,6 +5,7 @@ import 'package:misamoneykeeper_flutter/view/history/history_view.dart';
 
 class AddView extends StatefulWidget {
   final bool? isCheck;
+  final int? payId;
   final String? categoryIcon;
   final String? categoryTitle;
   final int? categoryDetailsId;
@@ -18,6 +19,7 @@ class AddView extends StatefulWidget {
   const AddView(
       {super.key,
       this.isCheck,
+      this.payId,
       this.categoryIcon,
       this.categoryTitle,
       this.categoryDetailsId,
@@ -159,6 +161,7 @@ class AddViewState extends State<AddView> {
           children: [
             PayPay(
               isCheck: widget.isCheck,
+              payId:  widget.payId,
               categoryIcon: widget.categoryIcon,
               categoryTitle: widget.categoryTitle,
               categoryDetailsId: widget.categoryDetailsId,
@@ -171,6 +174,7 @@ class AddViewState extends State<AddView> {
             ),
             PayCollect(
               isCheck: widget.isCheck,
+              payId:  widget.payId,
               categoryIcon: widget.categoryIcon,
               categoryTitle: widget.categoryTitle,
               categoryDetailsId: widget.categoryDetailsId,
