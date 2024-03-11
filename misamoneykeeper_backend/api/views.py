@@ -3,6 +3,7 @@ from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import datetime, timedelta
+from django.contrib.auth.hashers import check_password
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -222,6 +223,57 @@ class PayAddView(APIView):
                         'error_code': 400
                     }, status=status.HTTP_400_BAD_REQUEST)
 
+# API màn hình sửa Thu/Chi
+class PayUpdateView(APIView):
+    def post(self, request):
+
+        data=request.data
+
+        user_id = data.get('user_id')
+        category_details_id = data.get('category_details_id')
+        account_id = data.get('account_id')
+        if not User.objects.filter(id=user_id).exists():
+                return Response({
+                    'error_message': 'Người dùng không tồn tại',
+                    'error_code': 400,
+                }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            if not CategoryDetails.objects.filter(category_details_id=category_details_id).exists(): 
+                return Response({
+                    'error_message': 'Hạng mục không tồn tại',
+                    'error_code': 400,
+                }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                if not Account.objects.filter(account_id=account_id).exists():
+                    return Response({
+                        'error_message': 'Ví không tồn tại',
+                        'error_code': 400,
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    serializer = PayAddSerializer(data=request.data)
+                    if serializer.is_valid():
+                        pay = serializer.save()
+                        # Cập nhập lại số tiền trong tài khoản
+                        account = Account.objects.get(account_id=account_id)
+                        if data.get('p_type') == 1:
+                            money = account.ac_money - int(data.get('p_money'))
+                            account.ac_money = money
+                            account.save()
+                        else:
+                            money = account.ac_money + int(data.get('p_money'))
+                            account.ac_money = money
+                            account.save()
+                        data = {
+                            'status': 1,
+                            'payload': PayViewSerializer(pay).data,
+                            'message': "Bạn đã thêm khoản thu/chi thành công!"
+                        }
+                        return JsonResponse(data, status=status.HTTP_200_OK)
+                    return Response({
+                        'error_messages': serializer.errors,
+                        'error_code': 400
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                
 # API điều chỉnh số dư
 class BalanceAdjustmentView(APIView):
     def patch(self, request):
@@ -682,4 +734,44 @@ class AccountStopUsingView(APIView):
                     'error_messages': serializer.errors,
                     'error_code': 400
                 }, status=status.HTTP_400_BAD_REQUEST)
-    
+
+# API Đổi mật khẩu
+class UserUpdateView(APIView):
+    def patch(self, request):
+        data = request.data
+        user_id = data.get('user_id')
+        password = data.get('password')
+        new_password = data.get('new_password')
+        if not get_user_model().objects.filter(id=user_id).exists():
+            return Response({
+                'error_message': 'Người dùng không tồn tại',
+                'error_code': 400,
+        }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            user = get_user_model().objects.get(id=user_id)
+            if not check_password(password, user.password): # So sánh mật khẩu nguyên thủy với mật khẩu đã mã hóa
+                return Response({
+                    'error_message': 'Mật khẩu không chính xác',
+                    'error_code': 400,
+            }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                if password == new_password:
+                    return Response({
+                        'error_message': 'Mật khẩu mới không thể trung lặp với mật khẩu cũ',
+                        'error_code': 400,
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    serializer = UserViewSerializer(data=request.data)
+                    if serializer.is_valid():
+                        user.password = data.get('new_password')
+                        user.save()
+                        data = {
+                            'status': 1,
+                            'payload': UserViewSerializer(user).data,
+                            'message': "Bạn đã thay đổi mật khẩu thành công"
+                        }
+                    return JsonResponse(data, status=status.HTTP_200_OK)
+            
+# API View thông tin user
+
+# API Update thông tin User

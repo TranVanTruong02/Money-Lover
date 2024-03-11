@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserRegisterAdmin, UserRegisterView, UserLoginView, UserLogoutView, AccountAddView, AccountView, AccountUpdateView, AccountDeleteView, AccountStopUsingView, RefreshAccessToken, PayAddView, BalanceAdjustmentView, CategoryView, HistoryView, HistoryHomeView, RecentNotesView, RecentNotesHomeView, CategoryCollectView
+from .views import UserRegisterAdmin, UserRegisterView, UserLoginView, UserLogoutView, AccountAddView, AccountView, AccountUpdateView, AccountDeleteView, AccountStopUsingView, RefreshAccessToken, UserUpdateView, PayAddView, BalanceAdjustmentView, CategoryView, HistoryView, HistoryHomeView, RecentNotesView, RecentNotesHomeView, CategoryCollectView
 
 urlpatterns = [
     # Admin
@@ -10,6 +10,7 @@ urlpatterns = [
     path('misamoneykeeper/login', UserLoginView.as_view(), name='login'),
     path('misamoneykeeper/logout', UserLogoutView.as_view(), name='logout'),
     path('misamoneykeeper/refreshaccesstoken', RefreshAccessToken.as_view(), name='refresh access token'),
+    path('misamoneykeeper/newpassword', UserUpdateView.as_view(), name='new password'),
     path('misamoneykeeper/addpay', PayAddView.as_view(), name='Pay Add'),
     path('misamoneykeeper/balance/adjustment', BalanceAdjustmentView.as_view(), name='Balance Adjustment'),
     path('misamoneykeeper/category', CategoryView.as_view(), name='category'),

@@ -249,14 +249,49 @@ class _PayAccountState extends State<PayPay> {
                     const SizedBox(
                       height: 30,
                     ),
-                    SizedBox(
-                        width: 400,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            payVM.serviceAddPay();
-                          },
-                          child: const Text('LƯU'),
-                        )),
+                    widget.isCheck == true
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                      width: context.screenWidth * 0.4,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          payVM.serviceAddPay();
+                                        },
+                                        child: const Text('LƯU'),
+                                      )),
+                                  SizedBox(
+                                      width: context.screenWidth * 0.4,
+                                      child: ElevatedButton(
+                                        onPressed: () {},
+                                        child: const Text('Sửa'),
+                                      )),
+                                ],
+                              ),
+                              SizedBox(
+                                  width: context.screenWidth * 0.4,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                                    ),  
+                                    onPressed: () {},
+                                    child: const Text('Xóa'),
+                                  )),
+                            ],
+                          )
+                        : SizedBox(
+                            width: context.screenWidth * 0.8,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                 payVM.serviceAddPay();
+                              },
+                              child: const Text('Lưu'),
+                            )),
                   ],
                 )),
               ),
