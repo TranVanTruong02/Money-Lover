@@ -358,7 +358,6 @@ class CategoryView(APIView):
                     'error_code': 400,
             }, status=status.HTTP_400_BAD_REQUEST)
         else:
-            category = Category.objects.filter(ca_type=cad_type).order_by('category_id')
             categoryDetails = CategoryDetails.objects.filter(cad_type=cad_type).order_by('category_details_id')
             categorySerializer = CategorySerializer(category, many=True).data # many=True, Serializer sẽ xử lý một danh sách (list)
             categoryDetailsSerializer = CategoryDetailsSerializer(categoryDetails, many=True).data # .data để danh sách dữ liệu sau khi serializer đã xử lý xong
@@ -1042,7 +1041,7 @@ class UserProfileView(APIView):
                         'u_name': '',
                         'u_image': '',
                         'u_gender': '1',
-                        'u_birthday': '01-01-1990',
+                        'u_birthday': '1990-01-01',
                         'u_address': '',
                         'u_job': ''
                     })
