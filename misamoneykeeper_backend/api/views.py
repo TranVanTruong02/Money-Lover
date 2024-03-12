@@ -204,7 +204,7 @@ class PayAddView(APIView):
                         pay = serializer.save()
                         # Cập nhập lại số tiền trong tài khoản
                         account = Account.objects.get(account_id=account_id)
-                        if data.get('p_type') == 1:
+                        if data.get('p_type') == "1":
                             money = account.ac_money - int(data.get('p_money'))
                             account.ac_money = money
                             account.save()

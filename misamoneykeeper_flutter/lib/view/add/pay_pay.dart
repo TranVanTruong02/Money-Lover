@@ -295,8 +295,7 @@ class _PayAccountState extends State<PayPay> {
                                       ),
                                       onPressed: () {
                                         payVM.serviceDeletePay(
-                                          payVM.payId.value
-                                        );
+                                            payVM.payId.value);
                                       },
                                       child: const Text('Xóa'),
                                     )),

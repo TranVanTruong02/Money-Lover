@@ -34,51 +34,49 @@ class CategoryCollect extends StatelessWidget {
               );
             } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
               var data = snapshot.data!;
-              return SingleChildScrollView(
-                child: ListView.separated(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  scrollDirection: Axis.vertical,
-                  physics: const BouncingScrollPhysics(),
-                  separatorBuilder: (context, index) {
-                    return const Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: Colors.black26,
-                    );
-                  },
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      children: [
-                        Image.network(
-                          "${SVKey.mainUrl}${data[index].cadImage}",
-                          width: 30,
-                          height: 35,
-                        ),
-                        10.widthBox,
-                        ("${data[index].cadName}")
-                            .text
-                            .size(16)
-                            .fontFamily(sansBold)
-                            .color(Colors.black87)
-                            .make()
-                      ],
-                    )
-                        .box
-                        .padding(const EdgeInsets.symmetric(vertical: 5))
-                        .margin(const EdgeInsets.symmetric(vertical: 5))
-                        .make()
-                        .onTap(() {
-                      payCollect.categoryDetailsId.value =
-                          data[index].categoryDetailsId!;
-                      payCollect.categoryIcon.value =
-                          SVKey.mainUrl + data[index].cadImage!;
-                      payCollect.categoryTitle.value = data[index].cadName!;
-                      Get.back();
-                    });
-                  },
-                ),
+              return ListView.separated(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                scrollDirection: Axis.vertical,
+                physics: const BouncingScrollPhysics(),
+                separatorBuilder: (context, index) {
+                  return const Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: Colors.black26,
+                  );
+                },
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return Row(
+                    children: [
+                      Image.network(
+                        "${SVKey.mainUrl}${data[index].cadImage}",
+                        width: 30,
+                        height: 35,
+                      ),
+                      10.widthBox,
+                      ("${data[index].cadName}")
+                          .text
+                          .size(16)
+                          .fontFamily(sansBold)
+                          .color(Colors.black87)
+                          .make()
+                    ],
+                  )
+                      .box
+                      .padding(const EdgeInsets.symmetric(vertical: 5))
+                      .margin(const EdgeInsets.symmetric(vertical: 5))
+                      .make()
+                      .onTap(() {
+                    payCollect.categoryDetailsId.value =
+                        data[index].categoryDetailsId!;
+                    payCollect.categoryIcon.value =
+                        SVKey.mainUrl + data[index].cadImage!;
+                    payCollect.categoryTitle.value = data[index].cadName!;
+                    Get.back();
+                  });
+                },
               );
             } else {
               return Container();

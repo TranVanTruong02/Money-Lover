@@ -472,7 +472,7 @@ class _OtherPageState extends State<OtherPage> {
                 onPressed: () {
                   const CircularProgressIndicator();
                   setState(() {
-                    processBar();
+                    // processBar();
                     final now = DateTime.now();
                     // ignore: unused_local_variable
                     var formatData = formatDate(now,

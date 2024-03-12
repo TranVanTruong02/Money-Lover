@@ -1,4 +1,3 @@
-import 'package:date_format/date_format.dart';
 import 'package:intl/intl.dart';
 import 'package:misamoneykeeper_flutter/controller/splash_view_model.dart';
 import 'package:misamoneykeeper_flutter/controller/user_profile_view_model.dart';
