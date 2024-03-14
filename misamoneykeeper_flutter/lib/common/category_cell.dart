@@ -22,11 +22,13 @@ class CategoryCell extends StatelessWidget {
             height: 35,
             fit: BoxFit.cover,
           ),
-          title.text
-              .size(16)
-              .fontFamily(sansBold)
-              .color(Colors.black87)
-              .make()
+          Flexible(
+              fit: FlexFit.loose,
+              child: title.text
+                  .size(15)
+                  .fontFamily(sansBold)
+                  .color(Colors.black87)
+                  .make())
         ]).box.roundedSM.make().onTap(onPressed);
   }
 }

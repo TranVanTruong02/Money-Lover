@@ -73,6 +73,22 @@ class _AccountViewState extends State<AccountView> {
               color: Colors.amber,
             );
           } else if (snapshot.hasData) {
+            if (snapshot.data!.isEmpty) {
+              return Center(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(imgCoinBackGr),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'Không có tài khoản nào!!',
+                    style: TextStyle(fontSize: 15, color: Colors.grey[500]),
+                  ),
+                ],
+              )); // Hiển thị thông báo không có dữ liệu
+            }
             var data = snapshot.data;
             int sum = 0;
             int sum1 = 0;

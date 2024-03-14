@@ -66,6 +66,7 @@ class Account(models.Model):
 
 class Category(models.Model):
     category_id = models.AutoField(primary_key=True)
+    ca_type = models.PositiveIntegerField(default=1, help_text='1: Chi tiền, 2: Thu tiền, ...')
     ca_name = models.CharField(max_length = 100, default = '')
     ca_image = models.ImageField(upload_to='images', null=False, default=None)
     ca_explanation = models.CharField(max_length = 1000, default = '')

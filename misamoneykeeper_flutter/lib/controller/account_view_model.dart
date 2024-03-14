@@ -24,6 +24,11 @@ class AccountViewModel extends GetxController {
           return AccountModel.fromJson(oObj);
         }).toList();
         streamController.add(data);
+      } else if (resObj[KKey.status] == 0) {
+        var data = (resObj[KKey.message] as List? ?? []).map((e) {
+          return AccountModel.fromJson(e);
+        }).toList();
+        streamController.add(data);
       }
     }, failure: (err) async {
       Get.snackbar(appname, err.toString());

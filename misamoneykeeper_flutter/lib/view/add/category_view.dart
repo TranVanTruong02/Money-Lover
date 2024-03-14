@@ -54,13 +54,14 @@ class _CategoryViewState extends State<CategoryView> {
                         color: Colors.amberAccent.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(20)),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Row(
                           children: [
                             Image.network(
                               "${SVKey.mainUrl}${data[i].caImage}",
                               width: 30,
-                              height: 35,
+                              height: 30,
                             ),
                             10.widthBox,
                             ("${data[i].caName}")
@@ -74,36 +75,42 @@ class _CategoryViewState extends State<CategoryView> {
                         const SizedBox(
                           height: 20,
                         ),
-                        GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 4,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
-                                    childAspectRatio: 1.3),
-                            itemCount: data[i].categoryDetails!.length,
-                            itemBuilder: ((context, index) {
-                              return CategoryCell(
-                                  icon: SVKey.mainUrl +
-                                      data[i].categoryDetails![index].cadImage!,
-                                  title:
-                                      data[i].categoryDetails![index].cadName!,
-                                  onPressed: () {
-                                    payVM.categoryDetailsId.value = data[i]
-                                        .categoryDetails![index]
-                                        .categoryDetailsId!;
-                                    payVM.categoryIcon.value = SVKey.mainUrl +
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 4,
+                                      crossAxisSpacing: 5,
+                                      mainAxisSpacing: 7,
+                                      childAspectRatio: 1.3),
+                              itemCount: data[i].categoryDetails!.length,
+                              itemBuilder: ((context, index) {
+                                return CategoryCell(
+                                    icon: SVKey.mainUrl +
                                         data[i]
                                             .categoryDetails![index]
-                                            .cadImage!;
-                                    payVM.categoryTitle.value = data[i]
+                                            .cadImage!,
+                                    title: data[i]
                                         .categoryDetails![index]
-                                        .cadName!;
-                                    Get.back();
-                                  });
-                            })),
+                                        .cadName!,
+                                    onPressed: () {
+                                      payVM.categoryDetailsId.value = data[i]
+                                          .categoryDetails![index]
+                                          .categoryDetailsId!;
+                                      payVM.categoryIcon.value = SVKey.mainUrl +
+                                          data[i]
+                                              .categoryDetails![index]
+                                              .cadImage!;
+                                      payVM.categoryTitle.value = data[i]
+                                          .categoryDetails![index]
+                                          .cadName!;
+                                      Get.back();
+                                    });
+                              })),
+                        ),
                       ],
                     ),
                   );

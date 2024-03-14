@@ -25,7 +25,7 @@ const icGar = "assets/icons/gar.png";
 const icThuegiupviec = "assets/icons/thuegiupviec.png";
 const icTruyenhinh = "assets/icons/truyenhinh.png";
 
-const icLuong = "assets/icons/luong.png";
+const icLuong = "assets/icons/luong_vaCKPgu.png";
 const icThuong = "assets/icons/thuong.png";
 const icDuoctang = "assets/icons/duoctang.png";
 const icKhac = "assets/icons/khac.png";

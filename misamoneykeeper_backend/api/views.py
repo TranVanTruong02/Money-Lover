@@ -358,6 +358,7 @@ class CategoryView(APIView):
                     'error_code': 400,
             }, status=status.HTTP_400_BAD_REQUEST)
         else:
+            category = Category.objects.filter(ca_type=cad_type).order_by('category_id')
             categoryDetails = CategoryDetails.objects.filter(cad_type=cad_type).order_by('category_details_id')
             categorySerializer = CategorySerializer(category, many=True).data # many=True, Serializer sẽ xử lý một danh sách (list)
             categoryDetailsSerializer = CategoryDetailsSerializer(categoryDetails, many=True).data # .data để danh sách dữ liệu sau khi serializer đã xử lý xong
@@ -540,6 +541,7 @@ class RecentNotesHomeView(APIView):
         user_id = data.get('user_id')
         if not Pay.objects.filter(user_id=user_id).exists():
             return Response({
+                'status': 0,
                 'error_message': 'Không có dữ liệu thu/chi nào',
                 'error_code': 400,
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -640,6 +642,7 @@ class AccountView(APIView):
             accounts = Account.objects.filter(user_id=user_id)
             if not accounts.exists():
                 return Response({
+                    'status': 0,
                     'error_message': 'Chưa có ví nào',
                     'error_code': 400,
                 }, status=status.HTTP_400_BAD_REQUEST)
