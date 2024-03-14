@@ -241,7 +241,7 @@ class _AccountViewState extends State<AccountView> {
                                           context: context,
                                           builder: (context) => ExitDialog(
                                                 accountId:
-                                                    data[index].accountId!,
+                                                    listData1[index].accountId!,
                                               ));
                                     }
                                   });

@@ -9,20 +9,19 @@ class AccountDeleteViewModel extends GetxController {
   final accountViewModel = Get.find<AccountViewModel>();
   var isLoading = false.obs;
   var isSuccess = false.obs;
-
-  final int accountId;
-  AccountDeleteViewModel(this.accountId);
+  var idAccount = ''.obs;
 
   void serviceCallAccountDelete() async {
+    print(idAccount.value.toString());
     isLoading(true);
     await ServiceCallDelete.delete({
-      "account_id": accountId.toString(),
+      "account_id": idAccount.value.toString(),
       "user_id": splashVM.userModel.value.id.toString()
     }, SVKey.svDeleteAccount, isToken: true, withSuccess: (resObj) async {
       if (resObj[KKey.status] == 1) {
         isLoading(false);
-        accountViewModel.serviceCallList();
         Get.snackbar(appname, "Bạn đã xóa tài khoản thành công");
+        accountViewModel.serviceCallList();
       }
     }, failure: (err) async {
       Get.snackbar(appname, err.toString());

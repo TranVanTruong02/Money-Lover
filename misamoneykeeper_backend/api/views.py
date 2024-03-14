@@ -581,6 +581,7 @@ class RecentNotesView(APIView):
         year = data.get('year')
         if not Pay.objects.filter(user_id=user_id).exists():
             return Response({
+                'status': 0,
                 'error_message': 'Không có dữ liệu thu/chi nào',
                 'error_code': 400,
             }, status=status.HTTP_400_BAD_REQUEST)

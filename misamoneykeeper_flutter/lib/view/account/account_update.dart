@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:misamoneykeeper_flutter/controller/account_update_view_model.dart';
 import 'package:misamoneykeeper_flutter/model/account_model.dart';
 import 'package:misamoneykeeper_flutter/server/loading_indicator.dart';
@@ -62,23 +63,41 @@ class _AccountUpdateState extends State<AccountUpdate> {
                   child: Column(
                     children: [
                       Card(
-                        child: TextField(
+                        child: TextFormField(
                           controller: accountUpdateVM.balanceController.value,
+                          keyboardType:
+                              TextInputType.number, // Chỉ cho phép nhập số
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter
+                                .digitsOnly // Chỉ cho phép số
+                          ],
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Vui lòng nhập giá trị tài sản';
+                            }
+                            return null;
+                          },
                           decoration: const InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 5),
-                            labelText: 'Số dư ban đầu',
+                            labelText: 'Giá trị tài sản',
                             prefixIcon: Icon(Icons.attach_money),
                           ),
                         ),
                       ),
                       Card(
-                        child: TextField(
+                        child: TextFormField(
                           controller: accountUpdateVM.nameController.value,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Vui lòng nhập tên';
+                            }
+                            return null;
+                          },
                           decoration: const InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 5),
-                            labelText: 'Tên tài khoản',
+                            labelText: 'Tên',
                             prefixIcon: Icon(Icons.person),
                           ),
                         ),
@@ -149,6 +168,7 @@ class _AccountUpdateState extends State<AccountUpdate> {
                             ),
                             onPressed: () {
                               accountUpdateVM.serviceCallAccountUpdate();
+                              Navigator.pop(context);
                             },
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,

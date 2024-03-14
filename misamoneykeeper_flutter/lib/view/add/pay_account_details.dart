@@ -108,7 +108,20 @@ class PayAccountDetails extends StatelessWidget {
               },
             );
           } else {
-            return Container();
+            return Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(imgCoinBackGr),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Không có tài khoản nào!!',
+                  style: TextStyle(fontSize: 15, color: Colors.grey[500]),
+                ),
+              ],
+            ));
           }
         },
       ),

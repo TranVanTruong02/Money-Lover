@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:misamoneykeeper_flutter/controller/account_add_view_model.dart';
 import 'package:misamoneykeeper_flutter/server/loading_indicator.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
@@ -10,6 +11,7 @@ class AccountAdd extends StatefulWidget {
 }
 
 class _AddAccountPageState extends State<AccountAdd> {
+  final _formKey = GlobalKey<FormState>();
   final List<String> _accountTypes = [
     'Tiền mặt',
     'Ngân hàng',
@@ -45,124 +47,151 @@ class _AddAccountPageState extends State<AccountAdd> {
             },
           ),
         ),
-        body: Obx(
-          () => accountAddVM.isLoading.value == true
-              ? Center(child: loadingIndicator())
-              : Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Card(
-                        child: TextField(
-                          controller: accountAddVM.balanceController.value,
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 5),
-                            labelText: 'Giá trị tài sản',
-                            prefixIcon: Icon(Icons.attach_money),
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: TextField(
-                          controller: accountAddVM.nameController.value,
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 5),
-                            labelText: 'Tên',
-                            prefixIcon: Icon(Icons.person),
-                          ),
-                        ),
-                      ),
-                      Obx(
-                        () => DropdownButton(
-                          value: accountAddVM.accountType.value,
-                          isExpanded: true,
-                          underline: const SizedBox(),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 5),
-                          items: _accountTypes.map((accountType) {
-                            return DropdownMenuItem(
-                              value: accountType,
-                              child: Row(
-                                children: [
-                                  if (accountType == 'Tiền mặt')
-                                    const Icon(Icons.account_balance_wallet)
-                                  else if (accountType == 'Ngân hàng')
-                                    const Icon(Icons.account_balance)
-                                  else if (accountType == 'Tài sản cố định')
-                                    const Icon(Icons.two_wheeler),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(accountType),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                          // Xóa đối số vị trí thừa
-                          onChanged: (newValue) {
-                            accountAddVM.accountType.value =
-                                newValue ?? 'Tiền mặt';
-                            if (newValue == 'Tiền mặt') {
-                              accountAddVM.accountTypeId.value = 1;
-                            } else if (newValue == 'Ngân hàng') {
-                              accountAddVM.accountTypeId.value = 2;
-                            } else {
-                              accountAddVM.accountTypeId.value = 3;
-                            }
-                          },
-                        ),
-                      ),
-                      Card(
-                        child: TextFormField(
-                          controller: accountAddVM.descriptionController.value,
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 5),
-                            labelText: 'Diễn giải',
-                            prefixIcon: Icon(Icons.sort),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        body: SingleChildScrollView(
+          child: Obx(
+            () => accountAddVM.isLoading.value == true
+                ? Center(child: loadingIndicator())
+                : Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
                         children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue, // Màu xanh
-                              minimumSize: const Size(
-                                  200.0, 50.0), // Chiều dài và chiều cao
-                              shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
+                          Card(
+                            child: TextFormField(
+                              controller: accountAddVM.balanceController.value,
+                              keyboardType:
+                                  TextInputType.number, // Chỉ cho phép nhập số
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter
+                                    .digitsOnly // Chỉ cho phép số
+                              ],
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Vui lòng nhập giá trị tài sản';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 5),
+                                labelText: 'Giá trị tài sản',
+                                prefixIcon: Icon(Icons.attach_money),
                               ),
                             ),
-                            onPressed: () {
-                              accountAddVM.serviceCallCategory();
-                            },
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.save,
-                                  color: Colors.white,
-                                ),
-                                Text('Lưu',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    )),
-                              ],
+                          ),
+                          Card(
+                            child: TextFormField(
+                              controller: accountAddVM.nameController.value,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Vui lòng nhập tên';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 5),
+                                labelText: 'Tên',
+                                prefixIcon: Icon(Icons.person),
+                              ),
                             ),
-                          )
+                          ),
+                          Obx(
+                            () => DropdownButton(
+                              value: accountAddVM.accountType.value,
+                              isExpanded: true,
+                              underline: const SizedBox(),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 5),
+                              items: _accountTypes.map((accountType) {
+                                return DropdownMenuItem(
+                                  value: accountType,
+                                  child: Row(
+                                    children: [
+                                      if (accountType == 'Tiền mặt')
+                                        const Icon(Icons.account_balance_wallet)
+                                      else if (accountType == 'Ngân hàng')
+                                        const Icon(Icons.account_balance)
+                                      else if (accountType == 'Tài sản cố định')
+                                        const Icon(Icons.two_wheeler),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(accountType),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                              // Xóa đối số vị trí thừa
+                              onChanged: (newValue) {
+                                accountAddVM.accountType.value =
+                                    newValue ?? 'Tiền mặt';
+                                if (newValue == 'Tiền mặt') {
+                                  accountAddVM.accountTypeId.value = 1;
+                                } else if (newValue == 'Ngân hàng') {
+                                  accountAddVM.accountTypeId.value = 2;
+                                } else {
+                                  accountAddVM.accountTypeId.value = 3;
+                                }
+                              },
+                            ),
+                          ),
+                          Card(
+                            child: TextFormField(
+                              controller:
+                                  accountAddVM.descriptionController.value,
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 5),
+                                labelText: 'Diễn giải',
+                                prefixIcon: Icon(Icons.sort),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue, // Màu xanh
+                                  minimumSize: const Size(
+                                      200.0, 50.0), // Chiều dài và chiều cao
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    accountAddVM.serviceCallCategory();
+                                    Navigator.pop(context);
+                                  }
+                                },
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.save,
+                                      color: Colors.white,
+                                    ),
+                                    Text('Lưu',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        )),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+          ),
         ));
   }
 }

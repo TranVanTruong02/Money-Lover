@@ -1,5 +1,6 @@
 import 'package:misamoneykeeper_flutter/common/custom_button.dart';
 import 'package:misamoneykeeper_flutter/controller/account_delete_view_model.dart';
+import 'package:misamoneykeeper_flutter/controller/account_view_model.dart';
 import 'package:misamoneykeeper_flutter/utility/export.dart';
 
 class ExitDialog extends StatefulWidget {
@@ -12,10 +13,11 @@ class ExitDialog extends StatefulWidget {
 
 class _ExitDialogState extends State<ExitDialog> {
   late AccountDeleteViewModel accountDeleteViewModel;
+  late AccountViewModel accountViewModel;
   @override
   void initState() {
     super.initState();
-    accountDeleteViewModel = Get.put(AccountDeleteViewModel(widget.accountId));
+    accountDeleteViewModel = Get.put(AccountDeleteViewModel());
   }
 
   @override
@@ -45,8 +47,11 @@ class _ExitDialogState extends State<ExitDialog> {
                   // Thoát
                   color: const Color.fromARGB(255, 241, 90, 56),
                   onPress: () {
+                    accountDeleteViewModel.idAccount.value =
+                        widget.accountId.toString();
+
                     accountDeleteViewModel.serviceCallAccountDelete();
-                    Get.back();
+                    Navigator.pop(context);
                   },
                   title: "Đồng Ý",
                   textColor: Colors.white,

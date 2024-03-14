@@ -41,6 +41,12 @@ class HomeViewModel extends GetxController {
         }).toList();
         streamAccount.add(data);
         streamAccount.close();
+      } else if (resObj[KKey.status] == 0) {
+        var data = (resObj[KKey.message] as List? ?? []).map((e) {
+          return AccountModel.fromJson(e);
+        }).toList();
+        streamAccount.add(data);
+        streamAccount.close();
       }
     }, failure: (err) async {
       Get.snackbar(appname, err.toString());
@@ -54,6 +60,12 @@ class HomeViewModel extends GetxController {
       if (resObj[KKey.status] == 1) {
         var data = (resObj[KKey.payload] as List? ?? []).map((oObj) {
           return HomeStatusModel.fromJson(oObj);
+        }).toList();
+        streamHomeStatus.add(data);
+        streamHomeStatus.close();
+      } else if (resObj[KKey.status] == 0) {
+        var data = (resObj[KKey.message] as List? ?? []).map((e) {
+          return HomeStatusModel.fromJson(e);
         }).toList();
         streamHomeStatus.add(data);
         streamHomeStatus.close();
@@ -71,6 +83,12 @@ class HomeViewModel extends GetxController {
       if (resObj[KKey.status] == 1) {
         var data = (resObj[KKey.payload] as List? ?? []).map((oObj) {
           return RecnetNoteHome.fromJson(oObj);
+        }).toList();
+        streamRecnetNoteHome.add(data);
+        streamRecnetNoteHome.close();
+      } else if (resObj[KKey.status] == 0) {
+        var data = (resObj[KKey.message] as List? ?? []).map((e) {
+          return RecnetNoteHome.fromJson(e);
         }).toList();
         streamRecnetNoteHome.add(data);
         streamRecnetNoteHome.close();
