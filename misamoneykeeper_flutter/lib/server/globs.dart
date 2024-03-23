@@ -76,7 +76,7 @@ class Globs {
 }
 
 class SVKey {
-  static const mainUrl = "http://10.0.2.2:8000";
+  static const mainUrl = "http://117.1.28.99";
   static const baseUrl = '$mainUrl/api/misamoneykeeper/';
   static const nodeUrl = mainUrl;
 

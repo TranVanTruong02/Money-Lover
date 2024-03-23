@@ -34,9 +34,6 @@ urlpatterns = [
     path('misamoneykeeper/spendingcollected',SpendingCollectedView.as_view(),name=' Spending Collected'),
     path('misamoneykeeper/notification',ShowNotification.as_view(),name=' notification'),
     
-    
-    
-    
     # path('misamoneykeeper/category/update',CategoryUpdateView.as_view(),name='update category'),
     # path('misamoneykeeper/category/delete',CategoryDeleteView.as_view(),name='update category'),
     

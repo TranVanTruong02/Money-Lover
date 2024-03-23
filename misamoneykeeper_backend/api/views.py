@@ -1043,8 +1043,9 @@ class UserProfileView(APIView):
                         'user_id': c.id,
                         'user_details_id': '',
                         'email': c.email,
-                        'mobile': '',
-                        'u_name': '',
+                        'mobile': c.mobile,
+                        'first_name': c.first_name,
+                        'last_name': c.last_name,
                         'u_image': '',
                         'u_gender': '1',
                         'u_birthday': '1990-01-01',
@@ -1067,7 +1068,8 @@ class UserProfileView(APIView):
                         'user_details_id': c.user_details_id,
                         'email': c.user_id.email,
                         'mobile': c.user_id.mobile,
-                        'u_name': c.u_name,
+                        'first_name': c.user_id.first_name,
+                        'last_name': c.user_id.last_name,
                         'u_image': u_image_url,
                         'u_gender': c.u_gender,
                         'u_birthday': c.u_birthday,
@@ -1084,8 +1086,7 @@ class UserProfileView(APIView):
     # API Update thông tin User
 class UserUpdateProfileView(APIView):
     def post(self, request):
-        data = request.data
-        user_id = data.get('user_id')
+        user_id = request.data.get('user_id')
         if not get_user_model().objects.filter(id=user_id).exists():
             return Response({
                 'error_message': 'Người dùng không tồn tại',
@@ -1094,30 +1095,47 @@ class UserUpdateProfileView(APIView):
         else:
             if not UserDetails.objects.filter(user_id=user_id).exists(): # Nếu không tìm thấy thuộc tính phụ
                 
-                # Lưu thông tin phụ
-                serializerDetails = UserDetailsSerializer(data=request.data)
-                if serializerDetails.is_valid():
-                    serializerDetails.save()
-                    data1 = {
-                        'status': 1,
-                        'payload': serializerDetails.data,
-                        'message': "Chúc mừng tạo thông tin cho user thành công"
-                    }
-                    return JsonResponse(data1, status=status.HTTP_201_CREATED)
+                # Lưu thông tin vào bảng User 
+                user = get_user_model().objects.get(id=user_id)
+                serializer = UserViewSerializer(instance=user, data={'mobile': request.data.get('mobile'), 'first_name': request.data.get('first_name'), 'last_name': request.data.get('last_name')})
+                if serializer.is_valid():
+                    user.mobile = request.data.get('mobile')
+                    user.first_name = request.data.get('first_name')
+                    user.last_name = request.data.get('last_name')
+                    user.save()
+
+                    # Lưu thông tin vào bảng User Details
+                    serializerDetails = UserDetailsSerializer(data={'user_id': request.data.get('user_id'), 'u_gender': request.data.get('u_gender'), 'u_birthday': request.data.get('u_birthday'), 'u_address': request.data.get('u_address'), 'u_job': request.data.get('u_job')})
+                    if serializerDetails.is_valid():
+                        serializerDetails.save()
+                        data1 = {
+                            'status': 1,
+                            'payload': serializerDetails.data,
+                            'message': "Chúc mừng tạo thông tin cho user thành công"
+                        }
+                        return JsonResponse(data1, status=status.HTTP_201_CREATED)
                 return Response({
                     'error_messages': "Có lỗi gì đó đã sảy ra với bảng user",
                     'error_code': 400
                 }, status=status.HTTP_400_BAD_REQUEST)
             else:
-                    # Lưu thông tin phụ
-                    userDetails = UserDetails.objects.get(user_details_id=data.get('user_details_id'))
-                    serializerDetails = UserDetailsSerializer(instance=userDetails, data={'u_name': data.get('u_name'), 'u_gender': data.get('u_gender'), 'u_birthday': data.get('u_birthday'), 'u_address': data.get('u_address'), 'u_job': data.get('u_job')})
+                    # Lưu thông tin vào bảng User 
+                    user = get_user_model().objects.get(id=user_id)
+                    serializer = UserViewSerializer(instance=user, data={'mobile': request.data.get('mobile'), 'first_name': request.data.get('first_name'), 'last_name': request.data.get('last_name')})
+                    if serializer.is_valid():
+                        user.mobile = request.data.get('mobile')
+                        user.first_name = request.data.get('first_name')
+                        user.last_name = request.data.get('last_name')
+                        user.save()
+
+                    # Lưu thông tin vào bảng User Details
+                    userDetails = UserDetails.objects.get(user_details_id=request.data.get('user_details_id'))
+                    serializerDetails = UserDetailsSerializer(instance=userDetails, data={'u_gender': request.data.get('u_gender'), 'u_birthday': request.data.get('u_birthday'), 'u_address': request.data.get('u_address'), 'u_job': request.data.get('u_job')})
                     if serializerDetails.is_valid():
-                        userDetails.u_name = data.get('u_name')
-                        userDetails.u_gender = data.get('u_gender')
-                        userDetails.u_birthday = data.get('u_birthday')
-                        userDetails.u_address = data.get('u_address')
-                        userDetails.u_job = data.get('u_job')
+                        userDetails.u_gender = request.data.get('u_gender')
+                        userDetails.u_birthday = request.data.get('u_birthday')
+                        userDetails.u_address = request.data.get('u_address')
+                        userDetails.u_job = request.data.get('u_job')
                         userDetails.save()
                     data1 = {
                         'status': 1,
