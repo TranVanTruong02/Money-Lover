@@ -1,33 +1,36 @@
 class UserProfile {
   int? userId;
-  dynamic userDetailsId;
+  int? userDetailsId;
   String? email;
   String? mobile;
-  String? uName;
+  String? firstName;
+  String? lastName;
   String? uImage;
-  dynamic uGender;
+  int? uGender;
   String? uBirthday;
   String? uAddress;
   String? uJob;
 
   UserProfile(
-      {this.userId,
-      this.userDetailsId,
-      this.email,
-      this.mobile,
-      this.uName,
-      this.uImage,
-      this.uGender,
-      this.uBirthday,
-      this.uAddress,
-      this.uJob});
+      {userId,
+      userDetailsId,
+      email,
+      mobile,
+      firstName,
+      lastName,
+      uImage,
+      uGender,
+      uBirthday,
+      uAddress,
+      uJob});
 
   UserProfile.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
     userDetailsId = json['user_details_id'];
     email = json['email'];
     mobile = json['mobile'];
-    uName = json['u_name'];
+    firstName = json['first_name'];
+    lastName = json['last_name'];
     uImage = json['u_image'];
     uGender = json['u_gender'];
     uBirthday = json['u_birthday'];
@@ -36,12 +39,13 @@ class UserProfile {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = {};
     data['user_id'] = userId;
     data['user_details_id'] = userDetailsId;
     data['email'] = email;
     data['mobile'] = mobile;
-    data['u_name'] = uName;
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
     data['u_image'] = uImage;
     data['u_gender'] = uGender;
     data['u_birthday'] = uBirthday;

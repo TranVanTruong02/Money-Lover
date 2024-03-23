@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:misamoneykeeper_flutter/controller/splash_view_model.dart';
 import 'package:misamoneykeeper_flutter/model/user_profile.dart';
 import 'package:misamoneykeeper_flutter/server/globs.dart';
@@ -7,14 +6,15 @@ import 'package:misamoneykeeper_flutter/utility/export.dart';
 
 class UserProfileVM extends GetxController {
   final splashVM = Get.find<SplashViewModel>();
-  final txtName = TextEditingController().obs;
+  final txtFirstName = TextEditingController().obs;
+  final txtLastName = TextEditingController().obs;
   final txtPhone = TextEditingController().obs;
   final txtEmail = TextEditingController().obs;
   final txtBirthView = TextEditingController().obs;
   final txtAddress = TextEditingController().obs;
   final txtJob = TextEditingController().obs;
   final txtBirthSV = ''.obs;
-  final txtUserDetailId = ''.obs;
+  final txtUserDetailId = 0.obs;
   final selectedGender = 'Nam'.obs;
 
   Future<List<UserProfile>> serviceCallList() async {
@@ -37,7 +37,9 @@ class UserProfileVM extends GetxController {
     await ServiceCall.post({
       "user_id": splashVM.userModel.value.id.toString(),
       "user_details_id": txtUserDetailId.value.toString(),
-      "u_name": txtName.value.text,
+      "mobile": txtPhone.value.text,
+      "first_name": txtFirstName.value.text,
+      "last_name": txtLastName.value.text,
       "u_gender": selectedGender.value.toString(),
       "u_birthday": txtBirthSV.value,
       "u_address": txtAddress.value.text,
@@ -46,6 +48,14 @@ class UserProfileVM extends GetxController {
       if (resObj[KKey.status] == 1) {
         Get.snackbar(
             appname, "Chúc mừng, bạn đã cập nhật thông tin thành công");
+        
+        // Xóa lưu trữ cục bộ
+        Globs.udRemove(Globs.userPayload);
+        // Lưu mới 
+        var payload = resObj[KKey.payload] as Map? ?? {};
+
+        Globs.udSet(payload, Globs.userPayload);
+        Get.find<SplashViewModel>().goAfterLoginMainTab();
       }
     }, failure: (err) async {
       Get.snackbar(appname, err.toString());

@@ -1041,7 +1041,7 @@ class UserProfileView(APIView):
                 for c in user:
                     data.append({
                         'user_id': c.id,
-                        'user_details_id': '',
+                        'user_details_id': 0,
                         'email': c.email,
                         'mobile': c.mobile,
                         'first_name': c.first_name,
@@ -1110,7 +1110,7 @@ class UserUpdateProfileView(APIView):
                         serializerDetails.save()
                         data1 = {
                             'status': 1,
-                            'payload': serializerDetails.data,
+                            'payload': UserViewSerializer(user).data,
                             'message': "Chúc mừng tạo thông tin cho user thành công"
                         }
                         return JsonResponse(data1, status=status.HTTP_201_CREATED)
@@ -1139,6 +1139,7 @@ class UserUpdateProfileView(APIView):
                         userDetails.save()
                     data1 = {
                         'status': 1,
+                        'payload': UserViewSerializer(user).data,
                         'message': "Bạn đã cập nhật thông tin người dùng thành công"
                     }
                     return JsonResponse(data1, status=status.HTTP_200_OK)

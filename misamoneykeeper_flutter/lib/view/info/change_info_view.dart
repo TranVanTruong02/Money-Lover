@@ -24,10 +24,11 @@ class _ChangeInfoViewState extends State<ChangeInfoView> {
   Future<void> fetchDataFromServer() async {
     List<UserProfile> data = await userProfileVM.serviceCallList();
     for (var item in data) {
-      userProfileVM.txtName.value.text = item.uName!;
+      userProfileVM.txtFirstName.value.text = item.firstName!;
+      userProfileVM.txtLastName.value.text = item.lastName!;
       userProfileVM.txtPhone.value.text = splashVM.userModel.value.mobile!;
       userProfileVM.txtEmail.value.text = item.email!;
-      userProfileVM.txtUserDetailId.value = item.userDetailsId!.toString();
+      userProfileVM.txtUserDetailId.value = item.userDetailsId!;
       if (item.uGender!.toString() == "") {
         userProfileVM.selectedGender.value = "";
       } else {
@@ -130,8 +131,12 @@ class _ChangeInfoViewState extends State<ChangeInfoView> {
                 child: Column(
                   children: [
                     textFormField(
-                        titleText: 'Tên hiện thỉ',
-                        controller: userProfileVM.txtName.value,
+                        titleText: 'Họ và Tên Đệm',
+                        controller: userProfileVM.txtFirstName.value,
+                        enabled: true),
+                    textFormField(
+                        titleText: 'Tên',
+                        controller: userProfileVM.txtLastName.value,
                         enabled: true),
                     textFormField(
                         titleText: 'Số điện thoại',
