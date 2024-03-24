@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:misamoneykeeper_flutter/controller/splash_view_model.dart';
 import 'package:misamoneykeeper_flutter/model/user_profile.dart';
 import 'package:misamoneykeeper_flutter/server/globs.dart';
@@ -34,6 +35,12 @@ class UserProfileVM extends GetxController {
   }
 
   void serviceCallChangeProfile() async {
+    print(splashVM.userModel.value.id.toString());
+    print(txtUserDetailId.value.toString());
+    print(txtBirthSV.value);
+    DateTime dateTime = DateFormat('dd/MM/yyyy').parse(txtBirthSV.value);
+    String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+    print(formattedDate);
     await ServiceCall.post({
       "user_id": splashVM.userModel.value.id.toString(),
       "user_details_id": txtUserDetailId.value.toString(),
@@ -41,21 +48,21 @@ class UserProfileVM extends GetxController {
       "first_name": txtFirstName.value.text,
       "last_name": txtLastName.value.text,
       "u_gender": selectedGender.value.toString(),
-      "u_birthday": txtBirthSV.value,
+      "u_birthday": formattedDate,
       "u_address": txtAddress.value.text,
       "u_job": txtJob.value.text
     }, SVKey.svUpdateUserProfile, isToken: true, withSuccess: (resObj) async {
       if (resObj[KKey.status] == 1) {
         Get.snackbar(
             appname, "Chúc mừng, bạn đã cập nhật thông tin thành công");
-        
+
         // Xóa lưu trữ cục bộ
         Globs.udRemove(Globs.userPayload);
-        // Lưu mới 
+        // Lưu mới
         var payload = resObj[KKey.payload] as Map? ?? {};
 
         Globs.udSet(payload, Globs.userPayload);
-        Get.find<SplashViewModel>().goAfterLoginMainTab();
+        Get.find<SplashViewModel>().setData();
       }
     }, failure: (err) async {
       Get.snackbar(appname, err.toString());
