@@ -258,11 +258,10 @@ class _SignUpViewState extends State<SignUpView> {
                             style: const TextStyle(color: Colors.blue),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LoginView()));
+                                Get.to(const LoginView(),
+                                    transition: Transition.leftToRightWithFade,
+                                    duration:
+                                        const Duration(milliseconds: 400));
                               },
                           ),
                         ],

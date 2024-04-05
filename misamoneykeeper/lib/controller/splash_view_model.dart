@@ -12,15 +12,21 @@ class SplashViewModel extends GetxController {
 
     if (Globs.udValueBool(Globs.userLogin)) {
       userModel.value = UserModel.fromJson(Globs.udValue(Globs.userPayload));
-      Get.to(const HomeMain());
+      Get.to(const HomeMain(),
+          transition: Transition.zoom,
+          duration: const Duration(milliseconds: 400));
     } else {
-      Get.to(const IntroductionPage());
+      Get.to(const IntroductionPage(),
+          transition: Transition.zoom,
+          duration: const Duration(milliseconds: 400));
     }
   }
 
   void goAfterLoginMainTab() {
     userModel.value = UserModel.fromJson(Globs.udValue(Globs.userPayload));
-    Get.to(const HomeMain());
+    Get.to(const HomeMain(),
+        transition: Transition.zoom,
+        duration: const Duration(milliseconds: 400));
   }
 
   void setData() {
@@ -30,6 +36,8 @@ class SplashViewModel extends GetxController {
   void logout() {
     userModel.value = UserModel();
     Globs.udBoolSet(false, Globs.userLogin);
-    Get.offAll(const IntroductionPage());
+    Get.offAll(() => const IntroductionPage(),
+        transition: Transition.zoom,
+        duration: const Duration(milliseconds: 400));
   }
 }

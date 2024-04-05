@@ -69,25 +69,27 @@ class PayAccountDetails extends StatelessWidget {
                                 color: Colors.white,
                               )),
                     15.widthBox,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ("${listData[index].acName}")
-                            .text
-                            .size(16)
-                            .color(Colors.black45)
-                            .fontFamily(sansBold)
-                            .make(),
-                        3.heightBox,
-                        formatCurrency(listData[index].acMoney)
-                            .text
-                            .size(14)
-                            .fontFamily(sansRegular)
-                            .color(Colors.blue[200])
-                            .make(),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ("${listData[index].acName}")
+                              .text
+                              .size(16)
+                              .color(Colors.black45)
+                              .fontFamily(sansBold)
+                              .make(),
+                          3.heightBox,
+                          formatCurrency(listData[index].acMoney)
+                              .text
+                              .size(14)
+                              .fontFamily(sansRegular)
+                              .color(Colors.blue[200])
+                              .make(),
+                        ],
+                      ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 10),
                     listData[index].accountId == payVM.accountId.value
                         ? const Icon(
                             Icons.check_box_rounded,

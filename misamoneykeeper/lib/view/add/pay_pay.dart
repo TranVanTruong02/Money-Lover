@@ -264,13 +264,17 @@ class _PayAccountState extends State<PayPay> {
                               const SizedBox(
                                 width: 15,
                               ),
-                              Text(
-                                payVM.accountTitle.value == ''
-                                    ? "Chọn tài khoản"
-                                    : payVM.accountTitle.value,
-                                style: const TextStyle(fontSize: 16),
+                              Expanded(
+                                child: Text(
+                                  payVM.accountTitle.value == ''
+                                      ? "Chọn tài khoản"
+                                      : payVM.accountTitle.value,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
                               ),
-                              const Spacer(),
+                              const SizedBox(
+                                width: 10,
+                              ),
                               const Icon(Icons.navigate_next)
                             ],
                           ),

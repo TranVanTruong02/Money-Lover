@@ -70,13 +70,10 @@ class InformationViewState extends State<InformationView> {
               //Khi nhấn vào nút thì sẽ hiện thị ra trang thay đổi thông tin
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ChangeInfoView()),
-                  ).then((value) {
-                    delayedFunction();
-                  });
+                  Get.to(const ChangeInfoView(),
+                          transition: Transition.rightToLeftWithFade,
+                          duration: const Duration(milliseconds: 400))!
+                      .then((value) => delayedFunction());
                 },
                 style: TextButton.styleFrom(
                   elevation: 0,
@@ -101,11 +98,9 @@ class InformationViewState extends State<InformationView> {
               //Khi nhấn vào nút thì sẽ hiện thị ra trang thay đổi mật khẩu mới
               TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ChangePasswordView()),
-                  );
+                  Get.to(const ChangePasswordView(),
+                      transition: Transition.rightToLeftWithFade,
+                      duration: const Duration(milliseconds: 400));
                 },
                 style: TextButton.styleFrom(
                   animationDuration: Duration.zero,

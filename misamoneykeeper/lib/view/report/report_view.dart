@@ -17,6 +17,7 @@ class _ReportViewState extends State<ReportView> {
         backgroundColor: Colors.blueAccent,
         elevation: 0.5,
         centerTitle: true,
+        automaticallyImplyLeading: false,
         title: "Báo Cáo".text.white.size(20).fontFamily(sansSemibold).make(),
       ),
       backgroundColor: const Color.fromARGB(255, 244, 242, 242),
@@ -37,13 +38,21 @@ class _ReportViewState extends State<ReportView> {
                 onPressed: () {
                   switch (index) {
                     case 0:
-                      Get.to(() => const ReportDetails(idx: 0));
+                      Get.to(() => const ReportDetails(idx: 0),
+                          transition: Transition.rightToLeftWithFade,
+                          duration: const Duration(milliseconds: 400));
                     case 1:
-                      Get.to(() => const ReportDetails(idx: 1));
+                      Get.to(() => const ReportDetails(idx: 1),
+                          transition: Transition.rightToLeftWithFade,
+                          duration: const Duration(milliseconds: 400));
                     case 2:
-                      Get.to(() => const ReportDetails(idx: 2));
+                      Get.to(() => const ReportDetails(idx: 2),
+                          transition: Transition.rightToLeftWithFade,
+                          duration: const Duration(milliseconds: 400));
                     case 3:
-                      Get.to(() => const ReportDetails(idx: 3));
+                      Get.to(() => const ReportDetails(idx: 3),
+                          transition: Transition.rightToLeftWithFade,
+                          duration: const Duration(milliseconds: 400));
                   }
                 });
           })),

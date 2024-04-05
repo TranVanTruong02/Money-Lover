@@ -15,7 +15,7 @@ class HomeMain extends StatefulWidget {
 
 class _HomeMainState extends State<HomeMain> {
   int _selectedIndex = 0;
-
+  final PageController _pageController = PageController();
   //List các màn hình của bottombar
   final List<Widget> _widgetOptions = <Widget>[
     const HomeView(),
@@ -29,6 +29,11 @@ class _HomeMainState extends State<HomeMain> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _pageController.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
     });
   }
 
@@ -62,87 +67,98 @@ class _HomeMainState extends State<HomeMain> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => _onWillPop(context),
-      child: Scaffold(
-        //Hiện thị các màn của bottombar
-        body: buildNavigator(),
-        //BottomBar
-        bottomNavigationBar: BottomAppBar(
-          color: Colors.white,
-          shape: const CircularNotchedRectangle(),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //Các nút của bottombar
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    Icons.home,
-                    color: Colors.grey[700],
-                  ),
-                  onPressed: () {
-                    _onItemTapped(0);
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.account_balance_wallet,
-                    color: Colors.grey[700],
-                  ),
-                  onPressed: () {
-                    _onItemTapped(1);
-                  },
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey[700],
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.add,
-                      color: Colors.white,
+        onWillPop: () => _onWillPop(context),
+        child: Scaffold(
+          //Hiện thị các màn của bottombar
+          body: PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            children: _widgetOptions,
+          ),
+          //BottomBar
+          bottomNavigationBar: BottomAppBar(
+            color: Colors.white,
+            shape: const CircularNotchedRectangle(),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      Icons.home,
+                      color:
+                          _selectedIndex == 0 ? Colors.blue : Colors.grey[700],
                     ),
                     onPressed: () {
-                      _onItemTapped(2);
+                      _onItemTapped(0);
                     },
                   ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.bar_chart,
-                    color: Colors.grey[700],
+                  IconButton(
+                    icon: Icon(
+                      Icons.account_balance_wallet,
+                      color:
+                          _selectedIndex == 1 ? Colors.blue : Colors.grey[700],
+                    ),
+                    onPressed: () {
+                      _onItemTapped(1);
+                    },
                   ),
-                  onPressed: () {
-                    _onItemTapped(3);
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.dashboard,
-                    color: Colors.grey[700],
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:
+                          _selectedIndex == 2 ? Colors.blue : Colors.grey[700],
+                    ),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        _onItemTapped(2);
+                      },
+                    ),
                   ),
-                  onPressed: () {
-                    _onItemTapped(4);
-                  },
-                ),
-              ],
+                  IconButton(
+                    icon: Icon(
+                      Icons.bar_chart,
+                      color:
+                          _selectedIndex == 3 ? Colors.blue : Colors.grey[700],
+                    ),
+                    onPressed: () {
+                      _onItemTapped(3);
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.dashboard,
+                      color:
+                          _selectedIndex == 4 ? Colors.blue : Colors.grey[700],
+                    ),
+                    onPressed: () {
+                      _onItemTapped(4);
+                    },
+                  ),
+                ],
+              ),
             ),
+            // floatingActionButton: FloatingActionButton(
+            //   backgroundColor: Colors.blue,
+            //   onPressed: () {
+            //     _onItemTapped(4);
+            //   },
+            //   mini: true,
+            //   child: const Icon(Icons.add),
+            // ),
+            // floatingActionButtonLocation:
+            //     FloatingActionButtonLocation.miniCenterDocked,
           ),
-        ),
-        // floatingActionButton: FloatingActionButton(
-        //   backgroundColor: Colors.blue,
-        //   onPressed: () {
-        //     _onItemTapped(4);
-        //   },
-        //   mini: true,
-        //   child: const Icon(Icons.add),
-        // ),
-        // floatingActionButtonLocation:
-        //     FloatingActionButtonLocation.miniCenterDocked,
-      ),
-    );
+        ));
   }
 }

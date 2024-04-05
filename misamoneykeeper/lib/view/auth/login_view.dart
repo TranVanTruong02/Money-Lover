@@ -155,7 +155,10 @@ class _LoginViewState extends State<LoginView> {
                         children: [
                           TextButton(
                               onPressed: () {
-                                Get.to(() => const SignUpView());
+                                Get.to(() => const SignUpView(),
+                                    transition: Transition.leftToRightWithFade,
+                                    duration:
+                                        const Duration(milliseconds: 400));
                               },
                               child: "Đăng ký"
                                   .text

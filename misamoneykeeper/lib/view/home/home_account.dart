@@ -73,25 +73,26 @@ class _HomeAccountState extends State<HomeAccount> {
                                         ),
                             ),
                             15.widthBox,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ("${data[index].acName}")
-                                    .text
-                                    .size(16)
-                                    .color(Colors.black45)
-                                    .fontFamily(sansBold)
-                                    .make(),
-                                3.heightBox,
-                                formatCurrency(data[index].acMoney)
-                                    .text
-                                    .size(14)
-                                    .fontFamily(sansRegular)
-                                    .color(Colors.blue[200])
-                                    .make(),
-                              ],
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ("${data[index].acName}")
+                                      .text
+                                      .size(16)
+                                      .color(Colors.black45)
+                                      .fontFamily(sansBold)
+                                      .make(),
+                                  3.heightBox,
+                                  formatCurrency(data[index].acMoney)
+                                      .text
+                                      .size(14)
+                                      .fontFamily(sansRegular)
+                                      .color(Colors.blue[200])
+                                      .make(),
+                                ],
+                              ),
                             ),
-                            const Spacer(),
                             IconButton(
                                 onPressed: () {
                                   Get.to(

@@ -38,7 +38,8 @@ class _OtherPageState extends State<OtherPage> {
                 //Khi nhấn vào sẽ ra trang thông tin của user
                 child: TextButton(
                   onPressed: () {
-                    Get.to(() => const InformationView());
+                    Get.to(() => const InformationView(),
+                        transition: Transition.fade);
                   },
                   style: TextButton.styleFrom(
                           animationDuration: Duration.zero,
@@ -123,9 +124,11 @@ class _OtherPageState extends State<OtherPage> {
                             scaleImage: 1.0,
                             text: tinhhinhthuchi,
                             onPressed: () {
-                              Get.to(() => const ReportDetails(
-                                    idx: 1,
-                                  ));
+                              Get.to(
+                                  () => const ReportDetails(
+                                        idx: 1,
+                                      ),
+                                  transition: Transition.fade);
                             },
                           ),
                           ButtomWidget(
@@ -134,9 +137,11 @@ class _OtherPageState extends State<OtherPage> {
                             scaleImage: 1.3,
                             text: phantichchitieu,
                             onPressed: () {
-                              Get.to(() => const ReportDetails(
-                                    idx: 2,
-                                  ));
+                              Get.to(
+                                  () => const ReportDetails(
+                                        idx: 2,
+                                      ),
+                                  transition: Transition.fade);
                             },
                           ),
                           ButtomWidget(
@@ -145,9 +150,11 @@ class _OtherPageState extends State<OtherPage> {
                             scaleImage: 0.8,
                             text: phantichthu,
                             onPressed: () {
-                              Get.to(() => const ReportDetails(
-                                    idx: 3,
-                                  ));
+                              Get.to(
+                                  () => const ReportDetails(
+                                        idx: 3,
+                                      ),
+                                  transition: Transition.fade);
                             },
                           ),
                         ],
@@ -188,7 +195,8 @@ class _OtherPageState extends State<OtherPage> {
                           scaleImage: 1,
                           text: splitmoney,
                           onPressed: () {
-                            Get.to(() => const SplitMoneyView());
+                            Get.to(() => const SplitMoneyView(),
+                                transition: Transition.fade);
                           },
                         ),
                       ],

@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_final_fields
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:misamoneykeeper_flutter/common/exit_dialog.dart';
@@ -28,7 +31,6 @@ class _IntroductionPageState extends State<IntroductionPage> {
           "Hưởng thụ cuộc sống thoải mái, tự do tài chính với người thân, bạn bè"
     }
   ];
-
   Color? getColor(Set<MaterialState> states) {
     if (states.contains(MaterialState.pressed)) {
       return Colors.grey;
@@ -39,6 +41,11 @@ class _IntroductionPageState extends State<IntroductionPage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Future<bool> _onWillPop(BuildContext context) async {
@@ -65,20 +72,25 @@ class _IntroductionPageState extends State<IntroductionPage> {
                   //Hiện thị phần giới thiệu (slide)
                   Expanded(
                     flex: 3,
-                    child: PageView.builder(
-                      physics: const BouncingScrollPhysics(),
+                    child: CarouselSlider.builder(
                       itemCount: listData.length,
-                      itemBuilder: (context, index) {
+                      itemBuilder:
+                          (BuildContext context, int index, int realIndex) {
                         return Column(
                           children: [
-                            //Hiện thị ảnh
+                            const SizedBox(
+                              height: 30,
+                            ),
                             Expanded(
-                              flex: 4,
+                              flex: 3,
                               child: Image.asset(
                                 listData[index]['image']!,
+                                fit: BoxFit.cover,
                               ),
                             ),
-                            //Hiện thị thông tin tương ứng
+                            const SizedBox(
+                              height: 20,
+                            ),
                             Expanded(
                               flex: 1,
                               child: Container(
@@ -96,6 +108,17 @@ class _IntroductionPageState extends State<IntroductionPage> {
                           ],
                         );
                       },
+                      options: CarouselOptions(
+                        viewportFraction: 1,
+                        initialPage: 0,
+                        height: 700,
+                        enableInfiniteScroll: true,
+                        autoPlay: true,
+                        autoPlayCurve: Curves.ease,
+                        autoPlayInterval: const Duration(seconds: 4),
+                        autoPlayAnimationDuration: const Duration(seconds: 1),
+                        scrollDirection: Axis.horizontal,
+                      ),
                     ),
                   ),
                   //Hiện thị nút ấn đăng ký
@@ -105,7 +128,9 @@ class _IntroductionPageState extends State<IntroductionPage> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            Get.to(() => const SignUpView());
+                            Get.to(() => const SignUpView(),
+                                transition: Transition.rightToLeftWithFade,
+                                duration: const Duration(milliseconds: 400));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
@@ -130,7 +155,9 @@ class _IntroductionPageState extends State<IntroductionPage> {
                         //Hiện thị nút ấn đăng nhập
                         TextButton(
                           onPressed: () {
-                            Get.to(() => const LoginView());
+                            Get.to(() => const LoginView(),
+                                transition: Transition.rightToLeftWithFade,
+                                duration: const Duration(milliseconds: 400));
                           },
                           style: ButtonStyle(
                             animationDuration: Duration.zero,
